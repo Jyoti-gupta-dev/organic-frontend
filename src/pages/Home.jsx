@@ -14,6 +14,7 @@ import AppBanner from "../Components/AppBanner";
 import PeopleLookingFor from "../Components/PeopleLookingFor";
 import Features from "../Components/Features";
 import Footer from "../Components/Footer";
+import Aboutus from "./Aboutus";
 
 function Home() {
   return (
@@ -31,6 +32,7 @@ function Home() {
       <PeopleLookingFor />
       <Features />
       <Footer />
+      <Aboutus/>
     </>
   );
 }
