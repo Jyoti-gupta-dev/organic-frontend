@@ -63,23 +63,20 @@
 
 
 import React from "react";
-import discountBanner from "../Images/discountBanner.jpg";
 
 const DiscountBanner = () => {
   return (
     <section className="py-10 px-4">
       <div
         className="max-w-7xl mx-auto rounded-xl overflow-hidden bg-cover bg-center relative"
-        style={{
-          backgroundImage: `url(${discountBanner})`,
-        }}
+
       >
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/35"></div>
 
         {/* Content */}
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between px-8 md:px-16 py-16 gap-12">
-          
+
           {/* Left */}
           <div className="text-white max-w-lg">
             <h2 className="text-3xl md:text-4xl font-light leading-tight">
