@@ -25,7 +25,7 @@ function Login() {
 
         try {
 
-            const res = await axios.post("http://localhost:5000/api/user/login", data)
+            const res = await axios.post("https://organic-backend-five.vercel.app/api/user/login", data)
             if (res.data.success) {
                 localStorage.setItem(
                     "user", JSON.stringify(res.data.user)
