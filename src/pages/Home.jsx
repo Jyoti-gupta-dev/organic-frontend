@@ -32,7 +32,7 @@ function Home() {
       <PeopleLookingFor />
       <Features />
       <Footer />
-      <Aboutus/>
+    
     </>
   );
 }
