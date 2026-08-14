@@ -8,7 +8,7 @@ import SellingProducts from "../Components/SellingProducts";
 import PromoBanner from "../Components/PromoBanner";
 import FeaturedProducts from "../Components/FeaturedProducts";
 import DiscountBanner from "../Components/DiscountBanner";
-import PopularProduct from "../Components/PopularProducts";
+import PopularProducts from "../Components/PopularProducts";
 import BlogSection from "../Components/BlogSection";
 import AppBanner from "../Components/AppBanner";
 import PeopleLookingFor from "../Components/PeopleLookingFor";
@@ -26,7 +26,7 @@ function Home() {
       <PromoBanner />
       <FeaturedProducts />
       <DiscountBanner />
-      <PopularProduct />
+      <PopularProducts />
       <BlogSection />
       <AppBanner />
       <PeopleLookingFor />

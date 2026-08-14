@@ -1,121 +1,2612 @@
-import React from "react";
-import { Heart, ShoppingCart } from "lucide-react";
 
-const products = [
-  {
-    id: 1,
-    name: "Sandwich Bread",
-    image: "/images/bread.png",
-    oldPrice: 24,
-    price: 18,
-    discount: "10% OFF",
-  },
-  {
-    id: 2,
-    name: "Honeycrisp Apples",
-    image: "/images/apple.png",
-    oldPrice: 24,
-    price: 18,
-    discount: "10% OFF",
-  },
-  {
-    id: 3,
-    name: "Whole Wheat Bread",
-    image: "/images/bread2.png",
-    oldPrice: 24,
-    price: 18,
-    discount: "10% OFF",
-  },
-  {
-    id: 4,
-    name: "Fresh Fruits",
-    image: "/images/fruits.png",
-    oldPrice: 24,
-    price: 18,
-    discount: "10% OFF",
-  },
-  {
-    id: 5,
-    name: "Fresh Juice",
-    image: "/images/juice.png",
-    oldPrice: 24,
-    price: 18,
-    discount: "10% OFF",
-  },
-];
 
-const PopularProduct = () => {
+
+// // // {/* ================= PRODUCTS ================= */}
+// // // {!loading && products.length > 0 && (
+// // //   <div
+// // //     className="
+// // //       grid
+// // //       grid-cols-2
+// // //       sm:grid-cols-3
+// // //       md:grid-cols-4
+// // //       lg:grid-cols-5
+// // //       gap-x-8
+// // //       gap-y-12
+// // //     "
+// // //   >
+// // //     {products.map((item) => {
+// // //       const price = Number(item.price || 0);
+// // //       const discount = Number(item.discount || 0);
+
+// // //       const discountedPrice =
+// // //         price - (price * discount) / 100;
+
+// // //       const quantity = quantities[item._id] || 1;
+
+// // //       return (
+// // //         <div
+// // //           key={item._id}
+// // //           className="
+// // //             group
+// // //             relative
+// // //             bg-white
+// // //             min-w-0
+// // //           "
+// // //         >
+
+// // //           {/* ================= IMAGE AREA ================= */}
+// // //           <div
+// // //             className="
+// // //               relative
+// // //               w-full
+// // //               h-[210px]
+// // //               sm:h-[220px]
+// // //               rounded-xl
+// // //               flex
+// // //               items-center
+// // //               justify-center
+// // //               bg-gray-50
+// // //               overflow-hidden
+// // //             "
+// // //           >
+
+// // //             {/* DISCOUNT */}
+// // //             {discount > 0 && (
+// // //               <span
+// // //                 className="
+// // //                   absolute
+// // //                   top-3
+// // //                   left-3
+// // //                   z-10
+// // //                   bg-white
+// // //                   border
+// // //                   border-gray-200
+// // //                   text-gray-600
+// // //                   text-[10px]
+// // //                   font-medium
+// // //                   px-2
+// // //                   py-1
+// // //                   rounded-md
+// // //                 "
+// // //               >
+// // //                 {discount}% OFF
+// // //               </span>
+// // //             )}
+
+// // //             {/* PRODUCT IMAGE */}
+// // //             <img
+// // //               src={`http://localhost:5000/uploads/${item.image}`}
+// // //               alt={item.title}
+// // //               className="
+// // //                 w-full
+// // //                 h-full
+// // //                 object-contain
+// // //                 p-3
+// // //                 transition-transform
+// // //                 duration-500
+// // //                 group-hover:scale-105
+// // //               "
+// // //               onError={(e) => {
+// // //                 e.currentTarget.style.display = "none";
+// // //               }}
+// // //             />
+
+// // //             {/* ================= HOVER ACTIONS ================= */}
+// // //             <div
+// // //               className="
+// // //                 absolute
+// // //                 bottom-3
+// // //                 left-3
+// // //                 right-3
+// // //                 flex
+// // //                 items-center
+// // //                 gap-2
+
+// // //                 opacity-0
+// // //                 translate-y-3
+// // //                 pointer-events-none
+
+// // //                 group-hover:opacity-100
+// // //                 group-hover:translate-y-0
+// // //                 group-hover:pointer-events-auto
+
+// // //                 transition-all
+// // //                 duration-300
+// // //               "
+// // //             >
+
+// // //               {/* QUANTITY */}
+// // //               <div
+// // //                 className="
+// // //                   flex
+// // //                   items-center
+// // //                   h-9
+// // //                   bg-white
+// // //                   border
+// // //                   border-gray-200
+// // //                   rounded-lg
+// // //                   shadow-sm
+// // //                   overflow-hidden
+// // //                 "
+// // //               >
+// // //                 <button
+// // //                   type="button"
+// // //                   onClick={() => decreaseQty(item._id)}
+// // //                   className="
+// // //                     w-7
+// // //                     h-full
+// // //                     flex
+// // //                     items-center
+// // //                     justify-center
+// // //                     text-gray-600
+// // //                     hover:bg-gray-100
+// // //                   "
+// // //                 >
+// // //                   <Minus size={12} />
+// // //                 </button>
+
+// // //                 <span
+// // //                   className="
+// // //                     w-6
+// // //                     text-center
+// // //                     text-xs
+// // //                     font-medium
+// // //                     text-gray-800
+// // //                   "
+// // //                 >
+// // //                   {quantity}
+// // //                 </span>
+
+// // //                 <button
+// // //                   type="button"
+// // //                   onClick={() => increaseQty(item._id)}
+// // //                   className="
+// // //                     w-7
+// // //                     h-full
+// // //                     flex
+// // //                     items-center
+// // //                     justify-center
+// // //                     text-gray-600
+// // //                     hover:bg-gray-100
+// // //                   "
+// // //                 >
+// // //                   <Plus size={12} />
+// // //                 </button>
+// // //               </div>
+
+// // //               {/* ADD TO CART */}
+// // //               <button
+// // //                 type="button"
+// // //                 className="
+// // //                   flex-1
+// // //                   h-9
+// // //                   bg-green-600
+// // //                   hover:bg-green-700
+// // //                   text-white
+// // //                   rounded-lg
+// // //                   flex
+// // //                   items-center
+// // //                   justify-center
+// // //                   gap-1.5
+// // //                   text-xs
+// // //                   font-medium
+// // //                   shadow-sm
+// // //                   transition
+// // //                 "
+// // //               >
+// // //                 <ShoppingCart size={14} />
+// // //                 Add to Cart
+// // //               </button>
+
+// // //               {/* LIKE */}
+// // //               <button
+// // //                 type="button"
+// // //                 className="
+// // //                   w-9
+// // //                   h-9
+// // //                   shrink-0
+// // //                   bg-white
+// // //                   border
+// // //                   border-gray-200
+// // //                   rounded-lg
+// // //                   flex
+// // //                   items-center
+// // //                   justify-center
+// // //                   text-gray-600
+// // //                   hover:text-red-500
+// // //                   hover:bg-red-50
+// // //                   transition
+// // //                   shadow-sm
+// // //                 "
+// // //               >
+// // //                 <Heart size={16} />
+// // //               </button>
+// // //             </div>
+// // //           </div>
+
+// // //           {/* ================= PRODUCT INFO ================= */}
+// // //           <div className="pt-4 px-1">
+
+// // //             {/* CATEGORY */}
+// // //             <p
+// // //               className="
+// // //                 text-xs
+// // //                 font-medium
+// // //                 text-gray-500
+// // //                 lowercase
+// // //               "
+// // //             >
+// // //               {item.category || "Product"}
+// // //             </p>
+
+// // //             {/* TITLE */}
+// // //             <h3
+// // //               className="
+// // //                 mt-1
+// // //                 text-sm
+// // //                 font-semibold
+// // //                 text-gray-800
+// // //                 line-clamp-1
+// // //               "
+// // //             >
+// // //               {item.title}
+// // //             </h3>
+
+// // //             {/* RATING */}
+// // //             <div className="flex items-center mt-3">
+
+// // //               <div className="flex items-center gap-[1px]">
+// // //                 {[1, 2, 3, 4, 5].map((star) => (
+// // //                   <Star
+// // //                     key={star}
+// // //                     size={14}
+// // //                     className="
+// // //                       fill-yellow-400
+// // //                       text-yellow-400
+// // //                     "
+// // //                   />
+// // //                 ))}
+// // //               </div>
+
+// // //               <span
+// // //                 className="
+// // //                   text-xs
+// // //                   text-gray-400
+// // //                   ml-1.5
+// // //                 "
+// // //               >
+// // //                 ({item.reviewCount || 222})
+// // //               </span>
+// // //             </div>
+
+// // //             {/* PRICE */}
+// // //             <div
+// // //               className="
+// // //                 flex
+// // //                 items-center
+// // //                 gap-2
+// // //                 mt-2
+// // //                 min-h-[24px]
+// // //               "
+// // //             >
+
+// // //               {discount > 0 && (
+// // //                 <span
+// // //                   className="
+// // //                     text-xs
+// // //                     text-gray-400
+// // //                     line-through
+// // //                   "
+// // //                 >
+// // //                   ₹{price.toFixed(2)}
+// // //                 </span>
+// // //               )}
+
+// // //               <span
+// // //                 className="
+// // //                   text-base
+// // //                   font-bold
+// // //                   text-gray-900
+// // //                 "
+// // //               >
+// // //                 ₹
+// // //                 {discount > 0
+// // //                   ? discountedPrice.toFixed(2)
+// // //                   : price.toFixed(2)}
+// // //               </span>
+
+// // //               {discount > 0 && (
+// // //                 <span
+// // //                   className="
+// // //                     text-[9px]
+// // //                     border
+// // //                     border-gray-200
+// // //                     text-gray-500
+// // //                     px-1.5
+// // //                     py-0.5
+// // //                     rounded
+// // //                   "
+// // //                 >
+// // //                   {discount}% OFF
+// // //                 </span>
+// // //               )}
+// // //             </div>
+// // //           </div>
+// // //         </div>
+// // //       );
+// // //     })}
+// // //   </div>
+// // // )}
+// // // export default PopularProducts
+
+
+// // import React, { useEffect, useState } from "react";
+// // import axios from "axios";
+// // import {
+// //   Heart,
+// //   ShoppingCart,
+// //   Star,
+// //   Plus,
+// //   Minus,
+// // } from "lucide-react";
+
+// // const PopularProducts = () => {
+// //   const [products, setProducts] = useState([]);
+// //   const [loading, setLoading] = useState(true);
+// //   const [quantities, setQuantities] = useState({});
+
+// //   // ================= GET PRODUCTS =================
+// //   const getProducts = async () => {
+// //     try {
+// //       setLoading(true);
+
+// //       const response = await axios.get(
+// //         "http://localhost:5000/api/Products/getAllProducts"
+// //       );
+
+// //       console.log("Popular Products:", response.data);
+
+// //       setProducts(response.data.data || []);
+// //     } catch (error) {
+// //       console.error("Error fetching products:", error);
+// //       setProducts([]);
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   // ================= USE EFFECT =================
+// //   useEffect(() => {
+// //     getProducts();
+// //   }, []);
+
+// //   // ================= INCREASE QUANTITY =================
+// //   const increaseQty = (id) => {
+// //     setQuantities((prev) => ({
+// //       ...prev,
+// //       [id]: (prev[id] || 1) + 1,
+// //     }));
+// //   };
+
+// //   // ================= DECREASE QUANTITY =================
+// //   const decreaseQty = (id) => {
+// //     setQuantities((prev) => ({
+// //       ...prev,
+// //       [id]: Math.max((prev[id] || 1) - 1, 1),
+// //     }));
+// //   };
+
+// //   return (
+// //     <section className="py-12 bg-white">
+// //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+// //         {/* ================= HEADING ================= */}
+// //         <div className="mb-8">
+// //           <p className="text-sm text-green-600 font-medium">
+// //             Our Products
+// //           </p>
+
+// //           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1">
+// //             Popular Products
+// //           </h2>
+// //         </div>
+
+// //         {/* ================= LOADING ================= */}
+// //         {loading && (
+// //           <div className="text-center py-10 text-gray-500">
+// //             Loading products...
+// //           </div>
+// //         )}
+
+// //         {/* ================= NO PRODUCTS ================= */}
+// //         {!loading && products.length === 0 && (
+// //           <div className="text-center py-10 text-gray-500">
+// //             No products found.
+// //           </div>
+// //         )}
+
+// //         {/* ================= PRODUCTS ================= */}
+// //         {!loading && products.length > 0 && (
+// //           <div
+// //             className="
+// //               grid
+// //               grid-cols-2
+// //               sm:grid-cols-3
+// //               md:grid-cols-4
+// //               lg:grid-cols-5
+// //               gap-x-8
+// //               gap-y-12
+// //             "
+// //           >
+// //             {products.map((item) => {
+// //               const price = Number(item.price || 0);
+// //               const discount = Number(item.discount || 0);
+
+// //               const discountedPrice =
+// //                 price - (price * discount) / 100;
+
+// //               const quantity = quantities[item._id] || 1;
+
+// //               return (
+// //                 <div
+// //                   key={item._id}
+// //                   className="
+// //                     group
+// //                     relative
+// //                     bg-white
+// //                     min-w-0
+// //                   "
+// //                 >
+
+// //                   {/* ================= IMAGE AREA ================= */}
+// //                   <div
+// //                     className="
+// //                       relative
+// //                       w-full
+// //                       h-[210px]
+// //                       sm:h-[220px]
+// //                       rounded-xl
+// //                       flex
+// //                       items-center
+// //                       justify-center
+// //                       bg-gray-50
+// //                       overflow-hidden
+// //                     "
+// //                   >
+
+// //                     {/* DISCOUNT */}
+// //                     {discount > 0 && (
+// //                       <span
+// //                         className="
+// //                           absolute
+// //                           top-3
+// //                           left-3
+// //                           z-10
+// //                           bg-white
+// //                           border
+// //                           border-gray-200
+// //                           text-gray-600
+// //                           text-[10px]
+// //                           font-medium
+// //                           px-2
+// //                           py-1
+// //                           rounded-md
+// //                         "
+// //                       >
+// //                         {discount}% OFF
+// //                       </span>
+// //                     )}
+
+// //                     {/* PRODUCT IMAGE */}
+// //                     <img
+// //                       src={`http://localhost:5000/uploads/${item.image}`}
+// //                       alt={item.title}
+// //                       className="
+// //                         w-full
+// //                         h-full
+// //                         object-contain
+// //                         p-3
+// //                         transition-transform
+// //                         duration-500
+// //                         group-hover:scale-105
+// //                       "
+// //                       onError={(e) => {
+// //                         e.currentTarget.style.display = "none";
+// //                       }}
+// //                     />
+
+// //                     {/* ================= HOVER ACTIONS ================= */}
+// //                     <div
+// //                       className="
+// //                         absolute
+// //                         bottom-3
+// //                         left-3
+// //                         right-3
+// //                         flex
+// //                         items-center
+// //                         gap-2
+// //                         opacity-0
+// //                         translate-y-3
+// //                         pointer-events-none
+// //                         group-hover:opacity-100
+// //                         group-hover:translate-y-0
+// //                         group-hover:pointer-events-auto
+// //                         transition-all
+// //                         duration-300
+// //                       "
+// //                     >
+
+// //                       {/* QUANTITY */}
+// //                       <div
+// //                         className="
+// //                           flex
+// //                           items-center
+// //                           h-9
+// //                           bg-white
+// //                           border
+// //                           border-gray-200
+// //                           rounded-lg
+// //                           shadow-sm
+// //                           overflow-hidden
+// //                         "
+// //                       >
+// //                         <button
+// //                           type="button"
+// //                           onClick={() => decreaseQty(item._id)}
+// //                           className="
+// //                             w-7
+// //                             h-full
+// //                             flex
+// //                             items-center
+// //                             justify-center
+// //                             text-gray-600
+// //                             hover:bg-gray-100
+// //                           "
+// //                         >
+// //                           <Minus size={12} />
+// //                         </button>
+
+// //                         <span
+// //                           className="
+// //                             w-6
+// //                             text-center
+// //                             text-xs
+// //                             font-medium
+// //                             text-gray-800
+// //                           "
+// //                         >
+// //                           {quantity}
+// //                         </span>
+
+// //                         <button
+// //                           type="button"
+// //                           onClick={() => increaseQty(item._id)}
+// //                           className="
+// //                             w-7
+// //                             h-full
+// //                             flex
+// //                             items-center
+// //                             justify-center
+// //                             text-gray-600
+// //                             hover:bg-gray-100
+// //                           "
+// //                         >
+// //                           <Plus size={12} />
+// //                         </button>
+// //                       </div>
+
+// //                       {/* ADD TO CART */}
+// //                       <button
+// //                         type="button"
+// //                         className="
+// //                           flex-1
+// //                           h-9
+// //                           bg-green-600
+// //                           hover:bg-green-700
+// //                           text-white
+// //                           rounded-lg
+// //                           flex
+// //                           items-center
+// //                           justify-center
+// //                           gap-1.5
+// //                           text-xs
+// //                           font-medium
+// //                           shadow-sm
+// //                           transition
+// //                         "
+// //                       >
+// //                         <ShoppingCart size={14} />
+// //                         Add to Cart
+// //                       </button>
+
+// //                       {/* LIKE */}
+// //                       <button
+// //                         type="button"
+// //                         className="
+// //                           w-9
+// //                           h-9
+// //                           shrink-0
+// //                           bg-white
+// //                           border
+// //                           border-gray-200
+// //                           rounded-lg
+// //                           flex
+// //                           items-center
+// //                           justify-center
+// //                           text-gray-600
+// //                           hover:text-red-500
+// //                           hover:bg-red-50
+// //                           transition
+// //                           shadow-sm
+// //                         "
+// //                       >
+// //                         <Heart size={16} />
+// //                       </button>
+// //                     </div>
+// //                   </div>
+
+// //                   {/* ================= PRODUCT INFO ================= */}
+// //                   <div className="pt-4 px-1">
+
+// //                     {/* CATEGORY */}
+// //                     <p
+// //                       className="
+// //                         text-xs
+// //                         font-medium
+// //                         text-gray-500
+// //                         lowercase
+// //                       "
+// //                     >
+// //                       {item.category || "Product"}
+// //                     </p>
+
+// //                     {/* TITLE */}
+// //                     <h3
+// //                       className="
+// //                         mt-1
+// //                         text-sm
+// //                         font-semibold
+// //                         text-gray-800
+// //                         line-clamp-1
+// //                       "
+// //                     >
+// //                       {item.title}
+// //                     </h3>
+
+// //                     {/* RATING */}
+// //                     <div className="flex items-center mt-3">
+// //                       <div className="flex items-center gap-[1px]">
+// //                         {[1, 2, 3, 4, 5].map((star) => (
+// //                           <Star
+// //                             key={star}
+// //                             size={14}
+// //                             className="
+// //                               fill-yellow-400
+// //                               text-yellow-400
+// //                             "
+// //                           />
+// //                         ))}
+// //                       </div>
+
+// //                       <span
+// //                         className="
+// //                           text-xs
+// //                           text-gray-400
+// //                           ml-1.5
+// //                         "
+// //                       >
+// //                         ({item.reviewCount || 222})
+// //                       </span>
+// //                     </div>
+
+// //                     {/* PRICE */}
+// //                     <div
+// //                       className="
+// //                         flex
+// //                         items-center
+// //                         gap-2
+// //                         mt-2
+// //                         min-h-[24px]
+// //                       "
+// //                     >
+
+// //                       {discount > 0 && (
+// //                         <span
+// //                           className="
+// //                             text-xs
+// //                             text-gray-400
+// //                             line-through
+// //                           "
+// //                         >
+// //                           ₹{price.toFixed(2)}
+// //                         </span>
+// //                       )}
+
+// //                       <span
+// //                         className="
+// //                           text-base
+// //                           font-bold
+// //                           text-gray-900
+// //                         "
+// //                       >
+// //                         ₹
+// //                         {discount > 0
+// //                           ? discountedPrice.toFixed(2)
+// //                           : price.toFixed(2)}
+// //                       </span>
+
+// //                       {discount > 0 && (
+// //                         <span
+// //                           className="
+// //                             text-[9px]
+// //                             border
+// //                             border-gray-200
+// //                             text-gray-500
+// //                             px-1.5
+// //                             py-0.5
+// //                             rounded
+// //                           "
+// //                         >
+// //                           {discount}% OFF
+// //                         </span>
+// //                       )}
+// //                     </div>
+// //                   </div>
+// //                 </div>
+// //               );
+// //             })}
+// //           </div>
+// //         )}
+// //       </div>
+// //     </section>
+// //   );
+// // };
+
+// // export default PopularProducts;
+
+
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import {
+//   Heart,
+//   ShoppingCart,
+//   Star,
+//   Plus,
+//   Minus,
+// } from "lucide-react";
+
+// const PopularProducts = () => {
+//   // ================= STATES =================
+//   const [products, setProducts] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [quantities, setQuantities] = useState({});
+
+//   // ================= GET PRODUCTS =================
+//   const getProducts = async () => {
+//     try {
+//       setLoading(true);
+
+//       const response = await axios.get(
+//         "http://localhost:5000/api/Product/getAllProducts"
+//       );
+
+//       console.log("Popular Products:", response.data);
+
+//       setProducts(response.data.data || []);
+//     } catch (error) {
+//       console.error("Error fetching products:", error);
+//       setProducts([]);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // ================= USE EFFECT =================
+//   useEffect(() => {
+//     getProducts();
+//   }, []);
+
+//   // ================= INCREASE QUANTITY =================
+//   const increaseQty = (id) => {
+//     setQuantities((prev) => ({
+//       ...prev,
+//       [id]: (prev[id] || 1) + 1,
+//     }));
+//   };
+
+//   // ================= DECREASE QUANTITY =================
+//   const decreaseQty = (id) => {
+//     setQuantities((prev) => ({
+//       ...prev,
+//       [id]: Math.max((prev[id] || 1) - 1, 1),
+//     }));
+//   };
+
+//   return (
+//     <section className="py-12 bg-white">
+//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+//         {/* ================================================= */}
+//         {/* SECTION HEADER */}
+//         {/* ================================================= */}
+
+//         <div className="flex items-center justify-between mb-8">
+//           <div>
+//             <p className="text-sm font-medium text-green-600 mb-1">
+//               Our Products
+//             </p>
+
+//             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+//               Popular Products
+//             </h2>
+//           </div>
+
+//           <button
+//             type="button"
+//             className="
+//               bg-green-600
+//               hover:bg-green-700
+//               text-white
+//               px-5
+//               py-2.5
+//               rounded-lg
+//               text-sm
+//               font-medium
+//               transition
+//             "
+//           >
+//             View All
+//           </button>
+//         </div>
+
+//         {/* ================================================= */}
+//         {/* LOADING */}
+//         {/* ================================================= */}
+
+//         {loading && (
+//           <div className="flex justify-center items-center py-16">
+//             <p className="text-sm text-gray-500">
+//               Loading products...
+//             </p>
+//           </div>
+//         )}
+
+//         {/* ================================================= */}
+//         {/* NO PRODUCTS */}
+//         {/* ================================================= */}
+
+//         {!loading && products.length === 0 && (
+//           <div className="flex justify-center items-center py-16">
+//             <p className="text-sm text-gray-500">
+//               No products found.
+//             </p>
+//           </div>
+//         )}
+
+//         {/* ================================================= */}
+//         {/* PRODUCTS */}
+//         {/* ================================================= */}
+
+//         {!loading && products.length > 0 && (
+//           <div
+//             className="
+//               grid
+//               grid-cols-2
+//               sm:grid-cols-3
+//               md:grid-cols-4
+//               lg:grid-cols-5
+//               gap-x-8
+//               gap-y-10
+//             "
+//           >
+//             {products.map((item) => {
+//               // ================= PRICE =================
+//               const price = Number(item.price || 0);
+
+//               const discount = Number(item.discount || 0);
+
+//               const discountedPrice =
+//                 price - (price * discount) / 100;
+
+//               // ================= QUANTITY =================
+//               const quantity = quantities[item._id] || 1;
+
+//               return (
+//                 <div
+//                   key={item._id}
+//                   className="
+//                     group
+//                     relative
+//                     bg-white
+//                     min-w-0
+//                   "
+//                 >
+
+//                   {/* ================================================= */}
+//                   {/* IMAGE AREA */}
+//                   {/* ================================================= */}
+
+//                   <div
+//                     className="
+//                       relative
+//                       w-full
+//                       h-[210px]
+//                       sm:h-[220px]
+//                       rounded-xl
+//                       flex
+//                       items-center
+//                       justify-center
+//                       bg-gray-50
+//                       overflow-hidden
+//                     "
+//                   >
+
+//                     {/* ================= DISCOUNT ================= */}
+
+//                     {discount > 0 && (
+//                       <span
+//                         className="
+//                           absolute
+//                           top-3
+//                           left-3
+//                           z-10
+//                           bg-white
+//                           border
+//                           border-gray-200
+//                           text-gray-600
+//                           text-[10px]
+//                           font-medium
+//                           px-2
+//                           py-1
+//                           rounded-md
+//                         "
+//                       >
+//                         {discount}% OFF
+//                       </span>
+//                     )}
+
+//                     {/* ================= PRODUCT IMAGE ================= */}
+
+//                     <img
+//                       src={`http://localhost:5000/uploads/${item.image}`}
+//                       alt={item.title || "Product"}
+//                       className="
+//                         w-full
+//                         h-full
+//                         object-contain
+//                         p-3
+//                         transition-transform
+//                         duration-500
+//                         group-hover:scale-105
+//                       "
+//                       onError={(e) => {
+//                         e.currentTarget.style.display = "none";
+//                       }}
+//                     />
+
+//                     {/* ================= TOP RIGHT HEART ================= */}
+
+//                     <button
+//                       type="button"
+//                       className="
+//                         absolute
+//                         top-3
+//                         right-3
+//                         z-20
+//                         w-9
+//                         h-9
+//                         rounded-full
+//                         bg-white
+//                         border
+//                         border-gray-100
+//                         shadow-sm
+//                         flex
+//                         items-center
+//                         justify-center
+//                         text-gray-700
+
+//                         opacity-0
+//                         scale-90
+
+//                         group-hover:opacity-100
+//                         group-hover:scale-100
+
+//                         transition-all
+//                         duration-300
+
+//                         hover:text-red-500
+//                         hover:bg-red-50
+//                       "
+//                     >
+//                       <Heart size={17} />
+//                     </button>
+//                   </div>
+
+//                   {/* ================================================= */}
+//                   {/* HOVER ACTIONS */}
+//                   {/* ================================================= */}
+
+//                   <div
+//                     className="
+//                       flex
+//                       items-center
+//                       gap-2
+//                       mt-3
+
+//                       opacity-0
+//                       invisible
+//                       translate-y-2
+
+//                       group-hover:opacity-100
+//                       group-hover:visible
+//                       group-hover:translate-y-0
+
+//                       transition-all
+//                       duration-300
+//                     "
+//                   >
+
+//                     {/* ================= QUANTITY ================= */}
+
+//                     <div
+//                       className="
+//                         flex
+//                         items-center
+//                         h-9
+//                         bg-white
+//                         border
+//                         border-gray-300
+//                         rounded-lg
+//                         overflow-hidden
+//                         shrink-0
+//                       "
+//                     >
+//                       {/* MINUS */}
+
+//                       <button
+//                         type="button"
+//                         onClick={() =>
+//                           decreaseQty(item._id)
+//                         }
+//                         className="
+//                           w-7
+//                           h-full
+//                           flex
+//                           items-center
+//                           justify-center
+//                           text-gray-600
+//                           hover:bg-gray-100
+//                           transition
+//                         "
+//                       >
+//                         <Minus size={12} />
+//                       </button>
+
+//                       {/* QUANTITY */}
+
+//                       <span
+//                         className="
+//                           w-7
+//                           text-center
+//                           text-xs
+//                           font-medium
+//                           text-gray-800
+//                         "
+//                       >
+//                         {quantity}
+//                       </span>
+
+//                       {/* PLUS */}
+
+//                       <button
+//                         type="button"
+//                         onClick={() =>
+//                           increaseQty(item._id)
+//                         }
+//                         className="
+//                           w-7
+//                           h-full
+//                           flex
+//                           items-center
+//                           justify-center
+//                           text-gray-600
+//                           hover:bg-gray-100
+//                           transition
+//                         "
+//                       >
+//                         <Plus size={12} />
+//                       </button>
+//                     </div>
+
+//                     {/* ================= ADD TO CART ================= */}
+
+//                     <button
+//                       type="button"
+//                       className="
+//                         flex-1
+//                         min-w-0
+//                         h-9
+//                         bg-green-600
+//                         hover:bg-green-700
+//                         text-white
+//                         rounded-lg
+//                         flex
+//                         items-center
+//                         justify-center
+//                         gap-1.5
+//                         text-xs
+//                         font-medium
+//                         shadow-sm
+//                         transition
+//                         whitespace-nowrap
+//                       "
+//                     >
+//                       <ShoppingCart size={14} />
+
+//                       <span>
+//                         Add to Cart
+//                       </span>
+//                     </button>
+
+//                     {/* ================= LIKE ================= */}
+
+//                     <button
+//                       type="button"
+//                       className="
+//                         w-9
+//                         h-9
+//                         shrink-0
+//                         bg-white
+//                         border
+//                         border-gray-300
+//                         rounded-lg
+//                         flex
+//                         items-center
+//                         justify-center
+//                         text-gray-600
+//                         hover:text-red-500
+//                         hover:bg-red-50
+//                         transition
+//                       "
+//                     >
+//                       <Heart size={16} />
+//                     </button>
+//                   </div>
+
+//                   {/* ================================================= */}
+//                   {/* PRODUCT INFORMATION */}
+//                   {/* ================================================= */}
+
+//                   <div className="pt-2 px-1">
+
+//                     {/* ================= CATEGORY ================= */}
+
+//                     <p
+//                       className="
+//                         text-xs
+//                         font-medium
+//                         text-gray-500
+//                         lowercase
+//                       "
+//                     >
+//                       {item.category || "Product"}
+//                     </p>
+
+//                     {/* ================= TITLE ================= */}
+
+//                     <h3
+//                       className="
+//                         mt-1
+//                         text-sm
+//                         font-semibold
+//                         text-gray-800
+//                         line-clamp-1
+//                       "
+//                     >
+//                       {item.title || "Product"}
+//                     </h3>
+
+//                     {/* ================= RATING ================= */}
+
+//                     <div className="flex items-center mt-3">
+
+//                       <div className="flex items-center gap-[1px]">
+//                         {[1, 2, 3, 4, 5].map(
+//                           (star) => (
+//                             <Star
+//                               key={star}
+//                               size={14}
+//                               className="
+//                                 fill-yellow-400
+//                                 text-yellow-400
+//                               "
+//                             />
+//                           )
+//                         )}
+//                       </div>
+
+//                       <span
+//                         className="
+//                           text-xs
+//                           text-gray-400
+//                           ml-1.5
+//                         "
+//                       >
+//                         ({item.reviewCount || 222})
+//                       </span>
+//                     </div>
+
+//                     {/* ================= PRICE ================= */}
+
+//                     <div
+//                       className="
+//                         flex
+//                         items-center
+//                         gap-2
+//                         mt-2
+//                         min-h-[24px]
+//                         flex-wrap
+//                       "
+//                     >
+
+//                       {/* OLD PRICE */}
+
+//                       {discount > 0 && (
+//                         <span
+//                           className="
+//                             text-xs
+//                             text-gray-400
+//                             line-through
+//                           "
+//                         >
+//                           ₹{price.toFixed(2)}
+//                         </span>
+//                       )}
+
+//                       {/* CURRENT PRICE */}
+
+//                       <span
+//                         className="
+//                           text-base
+//                           font-bold
+//                           text-gray-900
+//                         "
+//                       >
+//                         ₹
+//                         {discount > 0
+//                           ? discountedPrice.toFixed(2)
+//                           : price.toFixed(2)}
+//                       </span>
+
+//                       {/* DISCOUNT */}
+
+//                       {discount > 0 && (
+//                         <span
+//                           className="
+//                             text-[9px]
+//                             border
+//                             border-gray-200
+//                             text-gray-500
+//                             px-1.5
+//                             py-0.5
+//                             rounded
+//                           "
+//                         >
+//                           {discount}% OFF
+//                         </span>
+//                       )}
+//                     </div>
+//                   </div>
+//                 </div>
+//               );
+//             })}
+//           </div>
+//         )}
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default PopularProducts;
+
+
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import {
+//   Heart,
+//   ShoppingCart,
+//   Star,
+//   Plus,
+//   Minus,
+// } from "lucide-react";
+
+// const PopularProducts = () => {
+//   const [products, setProducts] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [quantities, setQuantities] = useState({});
+
+//   // =====================================================
+//   // GET PRODUCTS
+//   // =====================================================
+
+//   const getProducts = async () => {
+//     try {
+//       setLoading(true);
+
+//       const response = await axios.get(
+//         "http://localhost:5000/api/Products/getAllProducts"
+//       );
+
+//       console.log("Popular Products:", response.data);
+
+//       setProducts(response.data.data || []);
+//     } catch (error) {
+//       console.error("Error fetching products:", error);
+//       setProducts([]);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // =====================================================
+//   // USE EFFECT
+//   // =====================================================
+
+//   useEffect(() => {
+//     getProducts();
+//   }, []);
+
+//   // =====================================================
+//   // INCREASE QUANTITY
+//   // =====================================================
+
+//   const increaseQty = (id) => {
+//     setQuantities((prev) => ({
+//       ...prev,
+//       [id]: (prev[id] || 1) + 1,
+//     }));
+//   };
+
+//   // =====================================================
+//   // DECREASE QUANTITY
+//   // =====================================================
+
+//   const decreaseQty = (id) => {
+//     setQuantities((prev) => ({
+//       ...prev,
+//       [id]: Math.max((prev[id] || 1) - 1, 1),
+//     }));
+//   };
+
+//   return (
+//     <section className="py-12 bg-white">
+//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+//         {/* ================================================= */}
+//         {/* SECTION HEADER */}
+//         {/* ================================================= */}
+
+//         <div className="flex items-end justify-between mb-8">
+
+//           <div>
+//             <p className="text-sm font-medium text-green-600 mb-1">
+//               Our Products
+//             </p>
+
+//             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+//               Popular Products
+//             </h2>
+//           </div>
+
+//           <button
+//             type="button"
+//             className="
+//               px-5
+//               py-2
+//               rounded-lg
+//               bg-green-600
+//               hover:bg-green-700
+//               text-white
+//               text-sm
+//               font-medium
+//               transition
+//             "
+//           >
+//             View All
+//           </button>
+
+//         </div>
+
+//         {/* ================================================= */}
+//         {/* LOADING */}
+//         {/* ================================================= */}
+
+//         {loading && (
+//           <div className="py-16 text-center">
+//             <p className="text-sm text-gray-500">
+//               Loading products...
+//             </p>
+//           </div>
+//         )}
+
+//         {/* ================================================= */}
+//         {/* NO PRODUCTS */}
+//         {/* ================================================= */}
+
+//         {!loading && products.length === 0 && (
+//           <div className="py-16 text-center">
+//             <p className="text-sm text-gray-500">
+//               No products found.
+//             </p>
+//           </div>
+//         )}
+
+//         {/* ================================================= */}
+//         {/* PRODUCTS */}
+//         {/* ================================================= */}
+
+//         {!loading && products.length > 0 && (
+//           <div
+//             className="
+//               grid
+//               grid-cols-2
+//               sm:grid-cols-3
+//               md:grid-cols-4
+//               lg:grid-cols-5
+//               gap-x-8
+//               gap-y-12
+//             "
+//           >
+
+//             {products.map((item) => {
+
+//               // =================================================
+//               // PRICE
+//               // =================================================
+
+//               const price = Number(item.price || 0);
+
+//               const discount = Number(item.discount || 0);
+
+//               const discountedPrice =
+//                 price - (price * discount) / 100;
+
+//               // =================================================
+//               // QUANTITY
+//               // =================================================
+
+//               const quantity = quantities[item._id] || 1;
+
+//               return (
+//                 <div
+//                   key={item._id}
+//                   className="
+//                     group
+//                     relative
+//                     min-w-0
+//                     bg-white
+//                   "
+//                 >
+
+//                   {/* ================================================= */}
+//                   {/* IMAGE AREA */}
+//                   {/* ================================================= */}
+
+//                   <div
+//                     className="
+//                       relative
+//                       w-full
+//                       h-[210px]
+//                       sm:h-[220px]
+//                       rounded-xl
+//                       bg-gray-50
+//                       flex
+//                       items-center
+//                       justify-center
+//                       overflow-hidden
+//                     "
+//                   >
+
+//                     {/* DISCOUNT */}
+
+//                     {discount > 0 && (
+//                       <span
+//                         className="
+//                           absolute
+//                           top-3
+//                           left-3
+//                           z-10
+//                           bg-white
+//                           border
+//                           border-gray-200
+//                           text-gray-600
+//                           text-[10px]
+//                           font-medium
+//                           px-2
+//                           py-1
+//                           rounded-md
+//                         "
+//                       >
+//                         {discount}% OFF
+//                       </span>
+//                     )}
+
+//                     {/* PRODUCT IMAGE */}
+
+//                     <img
+//                       src={`http://localhost:5000/uploads/${item.image}`}
+//                       alt={item.title || "Product"}
+//                       className="
+//                         w-full
+//                         h-full
+//                         object-contain
+//                         p-3
+//                         transition-transform
+//                         duration-500
+//                         group-hover:scale-105
+//                       "
+//                       onError={(e) => {
+//                         e.currentTarget.style.display = "none";
+//                       }}
+//                     />
+
+//                     {/* ================================================= */}
+//                     {/* IMAGE HEART */}
+//                     {/* ================================================= */}
+
+//                     <button
+//                       type="button"
+//                       className="
+//                         absolute
+//                         top-3
+//                         right-3
+//                         z-20
+//                         w-9
+//                         h-9
+//                         rounded-full
+//                         bg-white
+//                         border
+//                         border-gray-100
+//                         shadow-sm
+//                         flex
+//                         items-center
+//                         justify-center
+//                         text-gray-600
+
+//                         opacity-0
+//                         scale-90
+
+//                         group-hover:opacity-100
+//                         group-hover:scale-100
+
+//                         transition-all
+//                         duration-300
+
+//                         hover:text-red-500
+//                         hover:bg-red-50
+//                       "
+//                     >
+//                       <Heart size={17} />
+//                     </button>
+
+//                   </div>
+
+//                   {/* ================================================= */}
+//                   {/* PRODUCT DESCRIPTION / INFO */}
+//                   {/* ================================================= */}
+
+//                   <div className="pt-4 px-1">
+
+//                     {/* CATEGORY */}
+
+//                     <p
+//                       className="
+//                         text-xs
+//                         font-medium
+//                         text-gray-500
+//                         lowercase
+//                       "
+//                     >
+//                       {item.category || "Product"}
+//                     </p>
+
+//                     {/* PRODUCT TITLE */}
+
+//                     <h3
+//                       className="
+//                         mt-1
+//                         text-sm
+//                         font-semibold
+//                         text-gray-800
+//                         line-clamp-1
+//                       "
+//                     >
+//                       {item.title || "Product"}
+//                     </h3>
+
+//                     {/* RATING */}
+
+//                     <div className="flex items-center mt-3">
+
+//                       <div className="flex items-center gap-[1px]">
+
+//                         {[1, 2, 3, 4, 5].map((star) => (
+//                           <Star
+//                             key={star}
+//                             size={14}
+//                             className="
+//                               fill-yellow-400
+//                               text-yellow-400
+//                             "
+//                           />
+//                         ))}
+
+//                       </div>
+
+//                       <span
+//                         className="
+//                           text-xs
+//                           text-gray-400
+//                           ml-1.5
+//                         "
+//                       >
+//                         ({item.reviewCount || 222})
+//                       </span>
+
+//                     </div>
+
+//                     {/* PRICE */}
+
+//                     <div
+//                       className="
+//                         flex
+//                         items-center
+//                         gap-2
+//                         mt-2
+//                         min-h-[24px]
+//                       "
+//                     >
+
+//                       {/* OLD PRICE */}
+
+//                       {discount > 0 && (
+//                         <span
+//                           className="
+//                             text-xs
+//                             text-gray-400
+//                             line-through
+//                           "
+//                         >
+//                           ₹{price.toFixed(2)}
+//                         </span>
+//                       )}
+
+//                       {/* CURRENT PRICE */}
+
+//                       <span
+//                         className="
+//                           text-base
+//                           font-bold
+//                           text-gray-900
+//                         "
+//                       >
+//                         ₹
+//                         {discount > 0
+//                           ? discountedPrice.toFixed(2)
+//                           : price.toFixed(2)}
+//                       </span>
+
+//                       {/* DISCOUNT */}
+
+//                       {discount > 0 && (
+//                         <span
+//                           className="
+//                             text-[9px]
+//                             border
+//                             border-gray-200
+//                             text-gray-500
+//                             px-1.5
+//                             py-0.5
+//                             rounded
+//                           "
+//                         >
+//                           {discount}% OFF
+//                         </span>
+//                       )}
+
+//                     </div>
+
+//                   </div>
+
+//                   {/* ================================================= */}
+//                   {/* HOVER ACTIONS
+//                       DESCRIPTION / PRICE KE BILKUL NICHE
+//                   */}
+//                   {/* ================================================= */}
+
+//                   <div
+//                     className="
+//                       flex
+//                       items-center
+//                       gap-2
+//                       mt-3
+
+//                       opacity-0
+//                       invisible
+//                       translate-y-2
+
+//                       group-hover:opacity-100
+//                       group-hover:visible
+//                       group-hover:translate-y-0
+
+//                       transition-all
+//                       duration-300
+//                     "
+//                   >
+
+//                     {/* ================================================= */}
+//                     {/* QUANTITY */}
+//                     {/* ================================================= */}
+
+//                     <div
+//                       className="
+//                         h-9
+//                         flex
+//                         items-center
+//                         bg-white
+//                         border
+//                         border-gray-300
+//                         rounded-lg
+//                         overflow-hidden
+//                         shrink-0
+//                       "
+//                     >
+
+//                       {/* MINUS */}
+
+//                       <button
+//                         type="button"
+//                         onClick={() =>
+//                           decreaseQty(item._id)
+//                         }
+//                         className="
+//                           w-7
+//                           h-full
+//                           flex
+//                           items-center
+//                           justify-center
+//                           text-gray-600
+//                           hover:bg-gray-100
+//                           transition
+//                         "
+//                       >
+//                         <Minus size={12} />
+//                       </button>
+
+//                       {/* NUMBER */}
+
+//                       <span
+//                         className="
+//                           w-7
+//                           text-center
+//                           text-xs
+//                           font-medium
+//                           text-gray-800
+//                         "
+//                       >
+//                         {quantity}
+//                       </span>
+
+//                       {/* PLUS */}
+
+//                       <button
+//                         type="button"
+//                         onClick={() =>
+//                           increaseQty(item._id)
+//                         }
+//                         className="
+//                           w-7
+//                           h-full
+//                           flex
+//                           items-center
+//                           justify-center
+//                           text-gray-600
+//                           hover:bg-gray-100
+//                           transition
+//                         "
+//                       >
+//                         <Plus size={12} />
+//                       </button>
+
+//                     </div>
+
+//                     {/* ================================================= */}
+//                     {/* ADD TO CART */}
+//                     {/* ================================================= */}
+
+//                     <button
+//                       type="button"
+//                       className="
+//                         flex-1
+//                         h-9
+//                         bg-green-600
+//                         hover:bg-green-700
+//                         text-white
+//                         rounded-lg
+//                         flex
+//                         items-center
+//                         justify-center
+//                         gap-1.5
+//                         text-xs
+//                         font-medium
+//                         shadow-sm
+//                         transition
+//                         whitespace-nowrap
+//                       "
+//                     >
+//                       <ShoppingCart size={14} />
+
+//                       <span>
+//                         Add to Cart
+//                       </span>
+//                     </button>
+
+//                     {/* ================================================= */}
+//                     {/* LIKE */}
+//                     {/* ================================================= */}
+
+//                     <button
+//                       type="button"
+//                       className="
+//                         w-9
+//                         h-9
+//                         shrink-0
+//                         bg-white
+//                         border
+//                         border-gray-300
+//                         rounded-lg
+//                         flex
+//                         items-center
+//                         justify-center
+//                         text-gray-600
+//                         hover:text-red-500
+//                         hover:bg-red-50
+//                         transition
+//                       "
+//                     >
+//                       <Heart size={16} />
+//                     </button>
+
+//                   </div>
+
+//                 </div>
+//               );
+//             })}
+
+//           </div>
+//         )}
+
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default PopularProducts;import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  Star,
+  Heart,
+  ShoppingCart,
+  Plus,
+  Minus,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
+const PopularProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
+
+  // Mobile par selected product
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // =====================================================
+  // GET PRODUCTS
+  // =====================================================
+
+  const getProducts = async () => {
+    try {
+      setLoading(true);
+
+      const response = await axios.get(
+        "http://localhost:5000/api/Products/getAllProducts"
+      );
+
+      console.log("Popular Products:", response.data);
+
+      setProducts(response.data.data || []);
+    } catch (error) {
+      console.log("Error fetching popular products:", error);
+
+      if (error.response) {
+        console.log("Status:", error.response.status);
+        console.log("Response:", error.response.data);
+      }
+
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // =====================================================
+  // USE EFFECT
+  // =====================================================
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  // =====================================================
+  // INCREASE
+  // =====================================================
+
+  const increaseQuantity = (id) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 1) + 1,
+    }));
+  };
+
+  // =====================================================
+  // DECREASE
+  // =====================================================
+
+  const decreaseQuantity = (id) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: Math.max((prev[id] || 1) - 1, 1),
+    }));
+  };
+
+  // =====================================================
+  // MOBILE PRODUCT CLICK
+  // =====================================================
+
+  const handleProductClick = (id) => {
+    setSelectedProduct((prev) =>
+      prev === id ? null : id
+    );
+  };
+
   return (
-    <section className="max-w-7xl mx-auto py-16 px-5">
-      {/* Heading */}
-      <div className="flex items-center justify-between mb-10">
-        <h2 className="text-3xl font-bold text-gray-900">
-          Most Popular Products
-        </h2>
+    <section className="w-full bg-white py-8 sm:py-10 lg:py-12">
 
-        <button className="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
-          View All
-        </button>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-      {/* Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-        {products.map((item) => (
-          <div
-            key={item.id}
-            className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 p-5 relative"
-          >
-            {/* Discount */}
-            <span className="absolute top-4 left-4 bg-red-500 text-white text-xs px-2 py-1 rounded">
-              {item.discount}
-            </span>
+        {/* ================================================= */}
+        {/* HEADING */}
+        {/* ================================================= */}
 
-            {/* Wishlist */}
-            <button className="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-              <Heart size={18} />
-            </button>
+        <div className="flex items-center justify-between mb-7 sm:mb-8">
 
-            {/* Image */}
-            <div className="bg-green-50 rounded-full w-30 h-30 mx-auto flex items-center justify-center overflow-hidden">
-              <img
-                src={item.image}
-                alt=""
-                className="w-32 group-hover:scale-110 transition duration-300"
-              />
-            </div>
+          <div>
+            <p className="text-xs sm:text-sm text-green-600 font-medium mb-1">
+              Our Products
+            </p>
 
-            {/* Name */}
-            <h3 className="mt-5 text-center font-semibold">
-              {item.name}
-            </h3>
-
-            {/* Rating */}
-            <div className="text-yellow-400 text-center mt-2">
-              ★★★★★
-              <span className="text-gray-500 text-sm ml-1">(222)</span>
-            </div>
-
-            {/* Price */}
-            <div className="text-center mt-3">
-              <span className="line-through text-gray-400 mr-2">
-                ${item.oldPrice}
-              </span>
-
-              <span className="text-green-600 font-bold text-lg">
-                ${item.price}
-              </span>
-            </div>
-
-            {/* Button */}
-            <button className="mt-5 w-full h-11 rounded-xl bg-green-600 text-white flex items-center justify-center gap-2 hover:bg-green-700 transition">
-              <ShoppingCart size={18} />
-              Add to Cart
-            </button>
+            <h2
+              className="
+                text-xl
+                sm:text-2xl
+                md:text-3xl
+                font-bold
+                text-gray-900
+              "
+            >
+              Popular Products
+            </h2>
           </div>
-        ))}
+
+          <button
+            type="button"
+            className="
+              bg-green-600
+              hover:bg-green-700
+              text-white
+              text-xs
+              sm:text-sm
+              font-medium
+              px-4
+              sm:px-5
+              py-2
+              sm:py-2.5
+              rounded-md
+              transition
+            "
+          >
+            View All
+          </button>
+
+        </div>
+
+        {/* ================================================= */}
+        {/* LOADING */}
+        {/* ================================================= */}
+
+        {loading && (
+          <div className="text-center py-10 text-gray-500">
+            Loading products...
+          </div>
+        )}
+
+        {/* ================================================= */}
+        {/* NO PRODUCTS */}
+        {/* ================================================= */}
+
+        {!loading && products.length === 0 && (
+          <div className="text-center py-10 text-gray-500">
+            No products found.
+          </div>
+        )}
+
+        {/* ================================================= */}
+        {/* PRODUCTS */}
+        {/* ================================================= */}
+
+        {!loading && products.length > 0 && (
+
+          <div
+            className="
+              grid
+              grid-cols-2
+              sm:grid-cols-3
+              md:grid-cols-4
+              lg:grid-cols-5
+
+              gap-x-3
+              sm:gap-x-5
+              lg:gap-x-6
+
+              gap-y-8
+              sm:gap-y-10
+            "
+          >
+
+            {products.map((item) => {
+
+              // =================================================
+              // PRICE
+              // =================================================
+
+              const price = Number(item.price || 0);
+
+              const discount = Number(item.discount || 0);
+
+              const discountedPrice =
+                price - (price * discount) / 100;
+
+              // =================================================
+              // QUANTITY
+              // =================================================
+
+              const quantity =
+                quantities[item._id] || 1;
+
+              // =================================================
+              // MOBILE SELECTED
+              // =================================================
+
+              const isSelected =
+                selectedProduct === item._id;
+
+              return (
+
+                <div
+                  key={item._id}
+                  onClick={() =>
+                    handleProductClick(item._id)
+                  }
+                  className="
+                    group
+                    relative
+                    bg-white
+                    rounded-lg
+                    cursor-pointer
+                  "
+                >
+
+                  {/* ================================================= */}
+                  {/* IMAGE */}
+                  {/* ================================================= */}
+
+                  <div
+                    className="
+                      relative
+                      w-full
+
+                      h-36
+                      sm:h-40
+                      md:h-44
+
+                      flex
+                      items-center
+                      justify-center
+
+                      overflow-hidden
+                      rounded-lg
+                      bg-white
+                    "
+                  >
+
+                    {/* DISCOUNT */}
+
+                    {discount > 0 && (
+                      <span
+                        className="
+                          absolute
+                          top-2
+                          left-2
+                          z-10
+
+                          bg-white
+                          border
+                          border-gray-200
+
+                          text-gray-500
+                          text-[8px]
+                          sm:text-[10px]
+
+                          px-1.5
+                          sm:px-2
+
+                          py-0.5
+                          sm:py-1
+
+                          rounded-sm
+                        "
+                      >
+                        {discount}% OFF
+                      </span>
+                    )}
+
+                    {/* PRODUCT IMAGE */}
+
+                    <img
+                      src={`http://localhost:5000/uploads/${item.image}`}
+                      alt={item.title || "Product"}
+                      className="
+                        w-full
+                        h-full
+                        object-contain
+                      "
+                      onError={(e) => {
+                        e.currentTarget.style.display =
+                          "none";
+                      }}
+                    />
+
+                    {/* ================================================= */}
+                    {/* TOP HEART */}
+                    {/* ================================================= */}
+
+                    <button
+                      type="button"
+                      aria-label="Add to wishlist"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      className="
+                        absolute
+                        top-2
+                        right-2
+                        z-10
+
+                        w-8
+                        h-8
+                        sm:w-9
+                        sm:h-9
+
+                        rounded-full
+                        bg-white
+                        shadow
+
+                        flex
+                        items-center
+                        justify-center
+
+                        opacity-100
+
+                        sm:opacity-0
+                        sm:group-hover:opacity-100
+
+                        hover:bg-green-600
+                        hover:text-white
+
+                        transition
+                      "
+                    >
+                      <Heart
+                        size={15}
+                        className="
+                          sm:w-[17px]
+                          sm:h-[17px]
+                        "
+                      />
+                    </button>
+
+                  </div>
+
+                  {/* ================================================= */}
+                  {/* PRODUCT INFO */}
+                  {/* ================================================= */}
+
+                  <div className="pt-3">
+
+                    {/* TITLE */}
+
+                    <h3
+                      className="
+                        text-xs
+                        sm:text-sm
+
+                        text-gray-800
+                        font-medium
+                        leading-5
+
+                        min-h-[40px]
+                        line-clamp-2
+                      "
+                    >
+                      {item.title || "Product"}
+                    </h3>
+
+                    {/* RATING */}
+
+                    <div
+                      className="
+                        flex
+                        items-center
+                        gap-0.5
+                        sm:gap-1
+                        mt-2
+                      "
+                    >
+
+                      <div className="flex items-center">
+
+                        {[1, 2, 3, 4, 5].map(
+                          (star) => (
+                            <Star
+                              key={star}
+                              size={12}
+                              className="
+                                sm:w-[14px]
+                                sm:h-[14px]
+                                fill-yellow-400
+                                text-yellow-400
+                              "
+                            />
+                          )
+                        )}
+
+                      </div>
+
+                      <span
+                        className="
+                          text-[10px]
+                          sm:text-xs
+                          text-gray-500
+                          ml-1
+                        "
+                      >
+                        ({item.reviews || item.reviewCount || 222})
+                      </span>
+
+                    </div>
+
+                    {/* PRICE */}
+
+                    <div
+                      className="
+                        flex
+                        items-center
+                        gap-1
+                        sm:gap-2
+                        mt-2
+                        flex-wrap
+                      "
+                    >
+
+                      {/* OLD PRICE */}
+
+                      {discount > 0 && (
+                        <span
+                          className="
+                            text-[11px]
+                            sm:text-sm
+                            text-gray-400
+                            line-through
+                          "
+                        >
+                          ₹{price.toFixed(2)}
+                        </span>
+                      )}
+
+                      {/* CURRENT PRICE */}
+
+                      <span
+                        className="
+                          text-sm
+                          sm:text-base
+                          font-bold
+                          text-gray-900
+                        "
+                      >
+                        ₹
+                        {discount > 0
+                          ? discountedPrice.toFixed(2)
+                          : price.toFixed(2)}
+                      </span>
+
+                      {/* DISCOUNT */}
+
+                      {discount > 0 && (
+                        <span
+                          className="
+                            text-[8px]
+                            sm:text-[10px]
+
+                            text-gray-500
+
+                            border
+                            border-gray-300
+
+                            px-1
+                            sm:px-1.5
+
+                            py-0.5
+
+                            rounded-sm
+                          "
+                        >
+                          {discount}% OFF
+                        </span>
+                      )}
+
+                    </div>
+
+                    {/* ================================================= */}
+                    {/* CART AREA */}
+                    {/* ================================================= */}
+
+                    <div
+                      className={`
+                        flex
+                        items-center
+                        gap-1
+                        sm:gap-1.5
+                        mt-3
+                        overflow-hidden
+
+                        /* MOBILE */
+
+                        ${
+                          isSelected
+                            ? "opacity-100 h-10"
+                            : "opacity-0 h-0"
+                        }
+
+                        /* DESKTOP */
+
+                        sm:opacity-0
+                        sm:h-0
+
+                        sm:group-hover:opacity-100
+                        sm:group-hover:h-10
+
+                        transition-all
+                        duration-300
+                      `}
+                    >
+
+                      {/* ================================================= */}
+                      {/* QUANTITY */}
+                      {/* ================================================= */}
+
+                      <div
+                        className="
+                          flex
+                          items-center
+
+                          border
+                          border-gray-300
+                          rounded-md
+
+                          h-8
+                          sm:h-9
+
+                          shrink-0
+                        "
+                      >
+
+                        {/* MINUS */}
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+
+                            decreaseQuantity(item._id);
+                          }}
+                          className="
+                            w-6
+                            sm:w-7
+                            h-full
+
+                            flex
+                            items-center
+                            justify-center
+
+                            hover:bg-gray-100
+                          "
+                        >
+                          <Minus size={12} />
+                        </button>
+
+                        {/* NUMBER */}
+
+                        <span
+                          className="
+                            w-5
+                            sm:w-6
+
+                            text-center
+
+                            text-xs
+                            sm:text-sm
+                          "
+                        >
+                          {quantity}
+                        </span>
+
+                        {/* PLUS */}
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+
+                            increaseQuantity(item._id);
+                          }}
+                          className="
+                            w-6
+                            sm:w-7
+                            h-full
+
+                            flex
+                            items-center
+                            justify-center
+
+                            hover:bg-gray-100
+                          "
+                        >
+                          <Plus size={12} />
+                        </button>
+
+                      </div>
+
+                      {/* ================================================= */}
+                      {/* ADD TO CART */}
+                      {/* ================================================= */}
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+
+                          console.log(
+                            "Add to cart:",
+                            item.title,
+                            "Quantity:",
+                            quantity
+                          );
+                        }}
+                        className="
+                          flex-1
+
+                          h-8
+                          sm:h-9
+
+                          bg-green-600
+                          hover:bg-green-700
+
+                          text-white
+
+                          rounded-md
+
+                          flex
+                          items-center
+                          justify-center
+
+                          gap-1
+
+                          text-[10px]
+                          sm:text-xs
+
+                          font-medium
+
+                          min-w-0
+
+                          transition
+                        "
+                      >
+
+                        <ShoppingCart
+                          size={13}
+                          className="shrink-0"
+                        />
+
+                        <span className="truncate">
+                          Add to Cart
+                        </span>
+
+                      </button>
+
+                      {/* ================================================= */}
+                      {/* BOTTOM HEART */}
+                      {/* ================================================= */}
+
+                      <button
+                        type="button"
+                        aria-label="Add to wishlist"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        className="
+                          hidden
+                          sm:flex
+
+                          w-8
+                          sm:w-9
+
+                          h-8
+                          sm:h-9
+
+                          shrink-0
+
+                          border
+                          border-gray-300
+
+                          rounded-md
+
+                          items-center
+                          justify-center
+
+                          hover:bg-green-600
+                          hover:text-white
+                          hover:border-green-600
+
+                          transition
+                        "
+                      >
+                        <Heart size={14} />
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              );
+            })}
+
+          </div>
+        )}
+
       </div>
     </section>
   );
 };
 
-export default PopularProduct;
+export default PopularProducts;
