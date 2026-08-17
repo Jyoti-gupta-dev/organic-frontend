@@ -20,7 +20,7 @@ function SellingProducts() {
   // ================= GET PRODUCTS =================
   const getProducts = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.get( 
         "http://localhost:5000/api/Products/getAllProducts"
       );
 

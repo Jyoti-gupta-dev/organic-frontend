@@ -30,6 +30,8 @@ import SinglePost from "./pages/SinglePost";
 import Styles from "./pages/Styles";
 import MyAccount from "./pages/MyAccount";
 import ThankYou from "./pages/ThankYou";
+import CreateProduct from "./pages/CreateProduct";
+
 
 
 function App() {
@@ -65,6 +67,8 @@ function App() {
         <Route path="/Styles" element={<Styles/>}/>
         <Route path="/my-account" element={<MyAccount/>}/>
         <Route path="/thank-you" element={<ThankYou/>}/>
+        <Route path="createproduct" element={<CreateProduct/>}/>
+
         
 
 
