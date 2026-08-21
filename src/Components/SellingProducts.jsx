@@ -5,7 +5,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-// import api, { API_URL } from "../api/api";
 import api from "../api/Api";
 
 function SellingProducts() {
@@ -21,7 +20,7 @@ function SellingProducts() {
       setLoading(true);
 
       const res = await api.post("/Products/selling");
-      
+
 
       console.log("Selling Products:", res.data);
 
