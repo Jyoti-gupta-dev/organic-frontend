@@ -1,45 +1,4 @@
 
-// import React, { useState } from "react";
-// import { User, Mail, Phone, Lock, Eye, ArrowRight, Truck, ShieldCheck, RotateCcw, } from "lucide-react";
-
-// import toast, { Toaster } from "react-hot-toast";
-// import axios from "axios";
-// import signupleftimg from "../Images/signupleftimg.png"
-// import logo from "../Images/logo.png"
-// function Signup() {
-//     const [allData, setAllData] = useState({})
-//     console.log(allData)
-
-//     function getvalue(e) {
-//         setAllData({
-//             ...allData,
-//             [e.target.name]: e.target.value
-//         });
-//     }
-
-//     async function handleSubmit(e) {
-//         e.preventDefault()
-
-//         try {
-
-//             console.log(allData)
-
-//             const res = await axios.post("http://localhost:5000/api/user/signup", allData)
-//             console.log(res)
-
-//             if (res.data.staus) {
-//                 toast.success(res.data.messsage)
-//             }
-//             else {
-//                 toast.error(res.data.messsage)
-//             }
-
-//         } catch (error) {
-//             toast.error("something went wrong");
-//             console.log(error)
-
-//         }
-//     }
 
 
 import React, { useState } from "react";
@@ -61,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 
 import signupleftimg from "../Images/signupleftimg.png";
 import logo from "../Images/logo.png";
+import api from "../api/Api";
 
 function Signup() {
 
@@ -89,10 +49,11 @@ function Signup() {
 
             console.log("Signup data:", allData);
 
-            const res = await axios.post(
-                "http://localhost:5000/api/user/signup",
-                allData
-            );
+            // const res = await axios.post(
+            //     "http://localhost:5000/api/user/signup",
+            //     allData
+            // );
+            const res = await api.post("/user/signup", data)
 
             console.log("Signup response:", res.data);
 
