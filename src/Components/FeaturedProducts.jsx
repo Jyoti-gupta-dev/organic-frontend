@@ -355,6 +355,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import api from "../api/Api";
 
 function FeaturedProducts() {
   const [products, setProducts] = useState([]);
@@ -368,10 +369,11 @@ function FeaturedProducts() {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/Products/featured"
-      );
+      // const res = await axios.post(
+      //   "http://localhost:5000/api/Products/featured"
+      // );
 
+       const res = await api.post("/Products/Featured");
       console.log("Featured Products:", res.data);
 
       setProducts(res.data.data || []);

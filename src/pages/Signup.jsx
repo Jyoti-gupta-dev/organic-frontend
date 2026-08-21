@@ -53,7 +53,7 @@ function Signup() {
             //     "http://localhost:5000/api/user/signup",
             //     allData
             // );
-            const res = await api.post("/user/signup", data)
+            const res = await api.post("/user/signup", allData)
 
             console.log("Signup response:", res.data);
 

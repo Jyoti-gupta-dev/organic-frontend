@@ -243,7 +243,7 @@ function SellingProducts() {
               const imageUrl =
                 item.image?.startsWith("http")
                   ? item.image
-                  : `${API_URL}/uploads/${item.image}`;
+                  : `http://localhost:5000/uploads/${item.image}`;
 
               return (
                 <div

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import api from "../api/Api";
 
 function PopularProducts() {
   const [products, setProducts] = useState([]);
@@ -20,9 +21,10 @@ function PopularProducts() {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/Products/Popular"
-      );
+      // const res = await axios.post(
+      //   "http://localhost:5000/api/Products/Popular"
+      // );
+       const res = await api.post("/Products/Popular");
 
       console.log("Popular Products:", res.data);
 

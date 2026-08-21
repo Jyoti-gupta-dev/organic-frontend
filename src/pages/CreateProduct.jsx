@@ -907,6 +907,7 @@ import {
     Hash,
 } from "lucide-react";
 import Layout from "../Layout/Layout";
+import api from "../api/Api";
 
 const CreateProduct = () => {
 
@@ -1167,67 +1168,7 @@ const CreateProduct = () => {
                 image
             );
 
-            // =================================================
-            // DEBUG
-            // =================================================
-
-            console.log(
-                "========== PRODUCT DATA =========="
-            );
-
-            console.log(
-                "Title:",
-                product.title
-            );
-
-            console.log(
-                "Brand:",
-                product.brand
-            );
-
-            console.log(
-                "SKU:",
-                product.sku
-            );
-
-            console.log(
-                "Category:",
-                product.category
-            );
-
-            console.log(
-                "Price:",
-                product.price
-            );
-
-            console.log(
-                "Discount:",
-                product.discount
-            );
-
-            console.log(
-                "Size:",
-                product.size
-            );
-
-            console.log(
-                "Stock:",
-                product.stock
-            );
-
-            console.log(
-                "Sections:",
-                product.section
-            );
-
-            console.log(
-                "Image:",
-                image
-            );
-
-            console.log(
-                "=================================="
-            );
+         
 
             // =================================================
             // API
@@ -1237,6 +1178,7 @@ const CreateProduct = () => {
                 "http://localhost:5000/api/Products/createProduct",
                 formData
             );
+           // const res = await axios.post("/Products/createproduct",formData)
 
             console.log(
                 "Product Response:",
@@ -1433,7 +1375,7 @@ const CreateProduct = () => {
                                                 value={product.title}
                                                 onChange={handleChange}
                                                 placeholder="e.g. Fresh Organic Apples"
-                                                required
+                                                //required
                                                 className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#6c9c4a] focus:ring-4 focus:ring-[#edf5e8]"
                                             />
 
