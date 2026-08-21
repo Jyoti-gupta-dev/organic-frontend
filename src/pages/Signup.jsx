@@ -1,14 +1,79 @@
 
+// import React, { useState } from "react";
+// import { User, Mail, Phone, Lock, Eye, ArrowRight, Truck, ShieldCheck, RotateCcw, } from "lucide-react";
+
+// import toast, { Toaster } from "react-hot-toast";
+// import axios from "axios";
+// import signupleftimg from "../Images/signupleftimg.png"
+// import logo from "../Images/logo.png"
+// function Signup() {
+//     const [allData, setAllData] = useState({})
+//     console.log(allData)
+
+//     function getvalue(e) {
+//         setAllData({
+//             ...allData,
+//             [e.target.name]: e.target.value
+//         });
+//     }
+
+//     async function handleSubmit(e) {
+//         e.preventDefault()
+
+//         try {
+
+//             console.log(allData)
+
+//             const res = await axios.post("http://localhost:5000/api/user/signup", allData)
+//             console.log(res)
+
+//             if (res.data.staus) {
+//                 toast.success(res.data.messsage)
+//             }
+//             else {
+//                 toast.error(res.data.messsage)
+//             }
+
+//         } catch (error) {
+//             toast.error("something went wrong");
+//             console.log(error)
+
+//         }
+//     }
+
+
 import React, { useState } from "react";
-import { User, Mail, Phone, Lock, Eye, ArrowRight, Truck, ShieldCheck, RotateCcw, } from "lucide-react";
+import {
+    User,
+    Mail,
+    Phone,
+    Lock,
+    Eye,
+    ArrowRight,
+    Truck,
+    ShieldCheck,
+    RotateCcw,
+} from "lucide-react";
 
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import signupleftimg from "../Images/signupleftimg.png"
-import logo from "../Images/logo.png"
+import { useNavigate } from "react-router-dom";
+
+import signupleftimg from "../Images/signupleftimg.png";
+import logo from "../Images/logo.png";
+
 function Signup() {
-    const [allData, setAllData] = useState({})
-    console.log(allData)
+
+    const [allData, setAllData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        password: ""
+    });
+
+    const navigate = useNavigate();
+
+    console.log(allData);
 
     function getvalue(e) {
         setAllData({
@@ -18,29 +83,44 @@ function Signup() {
     }
 
     async function handleSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
 
-            console.log(allData)
+            console.log("Signup data:", allData);
 
-            const res = await axios.post("http://localhost:5000/api/user/signup", allData)
-            console.log(res)
+            const res = await axios.post(
+                "http://localhost:5000/api/user/signup",
+                allData
+            );
 
-            if (res.data.staus) {
-                toast.success(res.data.messsage)
-            }
-            else {
-                toast.error(res.data.messsage)
+            console.log("Signup response:", res.data);
+
+            if (res.data.success) {
+
+                toast.success(res.data.message);
+
+                // Signup successful → Login page
+                setTimeout(() => {
+                    navigate("/login");
+                }, 1000);
+
+            } else {
+
+                toast.error(res.data.message);
+
             }
 
         } catch (error) {
-            toast.error("something went wrong");
-            console.log(error)
 
+            console.log("Signup error:", error.response?.data);
+
+            toast.error(
+                error.response?.data?.message ||
+                "Something went wrong"
+            );
         }
     }
-
 
 
     return (

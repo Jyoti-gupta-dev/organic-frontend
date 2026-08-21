@@ -1,125 +1,94 @@
-import React, { useMemo, useState } from "react";
+
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Search,
   SlidersHorizontal,
   Heart,
   ShoppingBasket,
+
+
+  
   ChevronDown,
   Star,
   X,
+  Check,
+  Sparkles,
 } from "lucide-react";
+import axios from "axios";
 
 import Layout from "../Layout/Layout";
 
-const products = [
-  {
-    id: 1,
-    name: "Fresh Organic Apples",
-    category: "Fruits",
-    price: 180,
-    oldPrice: 220,
-    rating: 4.8,
-    reviews: 124,
-    image:
-      "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600",
-  },
-  {
-    id: 2,
-    name: "Organic Green Broccoli",
-    category: "Vegetables",
-    price: 120,
-    oldPrice: 150,
-    rating: 4.7,
-    reviews: 98,
-    image:
-      "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=600",
-  },
-  {
-    id: 3,
-    name: "Organic Fresh Carrots",
-    category: "Vegetables",
-    price: 90,
-    oldPrice: 120,
-    rating: 4.6,
-    reviews: 76,
-    image:
-      "https://images.unsplash.com/photo-1445282768818-728615cc910a?w=600",
-  },
-  {
-    id: 4,
-    name: "Natural Organic Honey",
-    category: "Natural Products",
-    price: 350,
-    oldPrice: 420,
-    rating: 4.9,
-    reviews: 210,
-    image:
-      "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600",
-  },
-  {
-    id: 5,
-    name: "Organic Strawberries",
-    category: "Fruits",
-    price: 240,
-    oldPrice: 280,
-    rating: 4.8,
-    reviews: 143,
-    image:
-      "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600",
-  },
-  {
-    id: 6,
-    name: "Fresh Organic Tomatoes",
-    category: "Vegetables",
-    price: 100,
-    oldPrice: 130,
-    rating: 4.5,
-    reviews: 89,
-    image:
-      "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=600",
-  },
-  {
-    id: 7,
-    name: "Organic Almonds",
-    category: "Dry Fruits",
-    price: 550,
-    oldPrice: 650,
-    rating: 4.9,
-    reviews: 167,
-    image:
-      "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?w=600",
-  },
-  {
-    id: 8,
-    name: "Organic Avocado",
-    category: "Fruits",
-    price: 280,
-    oldPrice: 330,
-    rating: 4.7,
-    reviews: 112,
-    image:
-      "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=600",
-  },
-];
+const API_URL = "http://localhost:5000";
 
 const categories = [
   "All",
-  "Fruits",
-  "Vegetables",
+  "Fruits & Vegetables",
+  "Dairy & Eggs",
+  "Pasta & Rice",
+  "Atta & Flour",
+  "Snacks",
+  "Beverages",
   "Dry Fruits",
-  "Natural Products",
+  "Cooking Oil",
+  "Staples",
 ];
 
 const Shop = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("default");
   const [mobileFilter, setMobileFilter] = useState(false);
   const [wishlist, setWishlist] = useState([]);
 
+  // ================= FETCH ALL PRODUCTS =================
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+
+        const res = await axios.get(
+          `${API_URL}/api/Products/getAllProducts`
+        );
+
+        console.log("Shop Products:", res.data);
+
+        if (res.data.success) {
+          setProducts(res.data.data || []);
+        } else {
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error("Shop Products Error:", error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // ================= WISHLIST =================
+
+  const toggleWishlist = (id) => {
+    setWishlist((items) =>
+      items.includes(id)
+        ? items.filter((item) => item !== id)
+        : [...items, id]
+    );
+  };
+
+  // ================= FILTER + SEARCH + SORT =================
+
   const filteredProducts = useMemo(() => {
     let result = products.filter((product) => {
-      const matchesSearch = product.name
+      const productTitle = product.title || "";
+
+      const matchesSearch = productTitle
         .toLowerCase()
         .includes(search.toLowerCase());
 
@@ -130,305 +99,611 @@ const Shop = () => {
     });
 
     if (sort === "low") {
-      result.sort((a, b) => a.price - b.price);
+      result.sort((a, b) => Number(a.price) - Number(b.price));
     }
 
     if (sort === "high") {
-      result.sort((a, b) => b.price - a.price);
+      result.sort((a, b) => Number(b.price) - Number(a.price));
     }
 
     if (sort === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
+      result.sort(
+        (a, b) => Number(b.rating || 0) - Number(a.rating || 0)
+      );
     }
 
     return result;
-  }, [search, category, sort]);
+  }, [products, search, category, sort]);
 
-  const toggleWishlist = (id) => {
-    setWishlist((items) =>
-      items.includes(id)
-        ? items.filter((item) => item !== id)
-        : [...items, id]
+  // ================= CLEAR FILTER =================
+
+  const clearFilters = () => {
+    setSearch("");
+    setCategory("All");
+    setSort("default");
+  };
+
+  // ================= OLD PRICE =================
+
+  const getOldPrice = (price, discount) => {
+    if (!discount || discount <= 0) return null;
+
+    return Math.round(
+      Number(price) / (1 - Number(discount) / 100)
     );
   };
 
   return (
     <Layout>
-      <div className="min-h-screen bg-[#fafcf8]">
+      <div className="min-h-screen bg-[#f7faf5]">
 
         {/* ================= HERO ================= */}
-        <section className="bg-[#eef5e8] px-4 py-14 sm:py-16">
-          <div className="mx-auto max-w-7xl">
 
-            <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-green-600">
-              Organic Store
-            </p>
+        <section className="relative overflow-hidden bg-[#edf5e8]">
 
-            <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl lg:text-5xl">
-              Shop
-            </h1>
+          <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-green-200/30 blur-3xl" />
 
-            <p className="mt-4 max-w-xl text-sm leading-6 text-gray-600 sm:text-base">
-              Discover fresh, healthy and carefully selected organic
-              products for your everyday lifestyle.
-            </p>
+          <div className="absolute -bottom-32 left-10 h-72 w-72 rounded-full bg-lime-200/30 blur-3xl" />
+
+          <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+
+            <div className="max-w-2xl">
+
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-green-700 backdrop-blur">
+
+                <Sparkles size={14} />
+
+                Organic Store
+
+              </div>
+
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+
+                Freshness you can
+
+                <span className="block text-green-600">
+                  feel & trust.
+                </span>
+
+              </h1>
+
+              <p className="mt-5 max-w-xl text-sm leading-7 text-gray-600 sm:text-base">
+                Discover fresh, healthy and carefully selected organic
+                products for your everyday lifestyle.
+              </p>
+
+              <div className="mt-7 flex flex-wrap gap-3">
+
+                <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm text-gray-700 shadow-sm">
+                  <Check size={16} className="text-green-600" />
+                  Fresh Products
+                </div>
+
+                <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm text-gray-700 shadow-sm">
+                  <Check size={16} className="text-green-600" />
+                  Quality Checked
+                </div>
+
+                <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm text-gray-700 shadow-sm">
+                  <Check size={16} className="text-green-600" />
+                  Fast Delivery
+                </div>
+
+              </div>
+
+            </div>
 
           </div>
         </section>
 
-        {/* ================= SHOP CONTENT ================= */}
-        <section className="px-4 py-10 sm:py-14">
+        {/* ================= SHOP ================= */}
+
+        <section className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+
           <div className="mx-auto max-w-7xl">
 
-            {/* TOP BAR */}
-            <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            {/* ================= SEARCH + SORT ================= */}
 
-              {/* Search */}
-              <div className="relative w-full lg:max-w-md">
-                <Search
-                  size={19}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                />
+            <div className="mb-8 rounded-3xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
 
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search products..."
-                  className="w-full rounded-full border border-gray-200 bg-white py-3 pl-11 pr-10 text-sm outline-none transition focus:border-green-500"
-                />
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-                {search && (
-                  <button
-                    onClick={() => setSearch("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
-                  >
-                    <X size={17} />
-                  </button>
-                )}
-              </div>
+                {/* SEARCH */}
 
-              <div className="flex items-center justify-between gap-3">
+                <div className="relative w-full lg:max-w-xl">
 
-                <p className="text-sm text-gray-500">
-                  Showing{" "}
-                  <span className="font-semibold text-gray-900">
-                    {filteredProducts.length}
-                  </span>{" "}
-                  products
-                </p>
-
-                {/* Mobile filter */}
-                <button
-                  onClick={() => setMobileFilter(!mobileFilter)}
-                  className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 lg:hidden"
-                >
-                  <SlidersHorizontal size={16} />
-                  Filter
-                </button>
-
-                {/* Sort */}
-                <div className="relative">
-                  <select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                    className="appearance-none rounded-full border border-gray-200 bg-white py-2.5 pl-4 pr-9 text-sm text-gray-700 outline-none"
-                  >
-                    <option value="default">Sort by</option>
-                    <option value="low">Price: Low to High</option>
-                    <option value="high">Price: High to Low</option>
-                    <option value="rating">Top Rated</option>
-                  </select>
-
-                  <ChevronDown
-                    size={15}
-                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  <Search
+                    size={19}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
                   />
+
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search fresh products..."
+                    className="w-full rounded-2xl border border-gray-200 bg-[#fafcf9] py-3.5 pl-11 pr-11 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:bg-white focus:ring-4 focus:ring-green-500/10"
+                  />
+
+                  {search && (
+                    <button
+                      onClick={() => setSearch("")}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-700"
+                    >
+                      <X size={17} />
+                    </button>
+                  )}
+
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+
+                  {/* PRODUCT COUNT */}
+
+                  <p className="hidden text-sm text-gray-500 sm:block">
+
+                    <span className="font-semibold text-gray-900">
+                      {filteredProducts.length}
+                    </span>{" "}
+                    products found
+
+                  </p>
+
+                  {/* MOBILE FILTER */}
+
+                  <button
+                    onClick={() => setMobileFilter(!mobileFilter)}
+                    className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 transition hover:border-green-300 hover:text-green-700 lg:hidden"
+                  >
+                    <SlidersHorizontal size={17} />
+                    Filters
+                  </button>
+
+                  {/* SORT */}
+
+                  <div className="relative">
+
+                    <select
+                      value={sort}
+                      onChange={(e) => setSort(e.target.value)}
+                      className="appearance-none rounded-2xl border border-gray-200 bg-white py-3 pl-4 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-green-500"
+                    >
+                      <option value="default">
+                        Sort by
+                      </option>
+
+                      <option value="low">
+                        Price: Low to High
+                      </option>
+
+                      <option value="high">
+                        Price: High to Low
+                      </option>
+
+                      <option value="rating">
+                        Top Rated
+                      </option>
+                    </select>
+
+                    <ChevronDown
+                      size={15}
+                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    />
+
+                  </div>
+
                 </div>
 
               </div>
+
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
+            {/* ================= CONTENT ================= */}
+
+            <div className="grid gap-8 lg:grid-cols-[250px_1fr]">
 
               {/* ================= SIDEBAR ================= */}
+
               <aside
-                className={`${
-                  mobileFilter ? "block" : "hidden"
-                } lg:block`}
+                className={`${mobileFilter ? "block" : "hidden"
+                  } lg:block`}
               >
-                <div className="rounded-2xl bg-white p-5 shadow-sm">
 
-                  <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-base font-semibold text-gray-900">
-                      Categories
-                    </h2>
+                <div className="sticky top-24 rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
 
-                    <SlidersHorizontal
-                      size={18}
-                      className="text-gray-400"
-                    />
+                  <div className="mb-5 flex items-center justify-between">
+
+                    <div>
+
+                      <p className="text-xs font-semibold uppercase tracking-widest text-green-600">
+                        Browse
+                      </p>
+
+                      <h2 className="mt-1 text-lg font-bold text-gray-900">
+                        Categories
+                      </h2>
+
+                    </div>
+
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-50">
+
+                      <SlidersHorizontal
+                        size={17}
+                        className="text-green-600"
+                      />
+
+                    </div>
+
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1">
+
                     {categories.map((item) => (
+
                       <button
                         key={item}
                         onClick={() => {
                           setCategory(item);
                           setMobileFilter(false);
                         }}
-                        className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition ${
-                          category === item
-                            ? "bg-[#eef5e8] font-semibold text-green-700"
-                            : "text-gray-600 hover:bg-gray-50"
-                        }`}
+                        className={`group flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-left text-sm transition ${category === item
+                            ? "bg-green-600 font-semibold text-white shadow-md shadow-green-600/20"
+                            : "text-gray-600 hover:bg-green-50 hover:text-green-700"
+                          }`}
                       >
+
                         <span>{item}</span>
 
                         {category === item && (
-                          <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
+                            <Check size={13} />
+                          </span>
                         )}
+
                       </button>
+
                     ))}
+
                   </div>
 
-                  <div className="my-7 border-t border-gray-100" />
+                  <div className="my-6 border-t border-gray-100" />
 
-                  <h2 className="mb-4 text-base font-semibold text-gray-900">
-                    Why Organic?
-                  </h2>
+                  <div className="rounded-2xl bg-[#f1f7ed] p-4">
 
-                  <ul className="space-y-3 text-sm text-gray-500">
-                    <li>✓ Fresh & quality products</li>
-                    <li>✓ Carefully selected</li>
-                    <li>✓ Secure checkout</li>
-                    <li>✓ Fast delivery</li>
-                  </ul>
+                    <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white">
+
+                      <Sparkles
+                        size={17}
+                        className="text-green-600"
+                      />
+
+                    </div>
+
+                    <h3 className="text-sm font-bold text-gray-900">
+                      Why Organic?
+                    </h3>
+
+                    <ul className="mt-3 space-y-2.5 text-xs leading-5 text-gray-600">
+
+                      <li className="flex gap-2">
+                        <Check
+                          size={14}
+                          className="mt-0.5 shrink-0 text-green-600"
+                        />
+                        Fresh & quality products
+                      </li>
+
+                      <li className="flex gap-2">
+                        <Check
+                          size={14}
+                          className="mt-0.5 shrink-0 text-green-600"
+                        />
+                        Carefully selected
+                      </li>
+
+                      <li className="flex gap-2">
+                        <Check
+                          size={14}
+                          className="mt-0.5 shrink-0 text-green-600"
+                        />
+                        Secure checkout
+                      </li>
+
+                      <li className="flex gap-2">
+                        <Check
+                          size={14}
+                          className="mt-0.5 shrink-0 text-green-600"
+                        />
+                        Fast delivery
+                      </li>
+
+                    </ul>
+
+                  </div>
 
                 </div>
+
               </aside>
 
               {/* ================= PRODUCTS ================= */}
+
               <div>
 
-                {filteredProducts.length === 0 ? (
-                  <div className="flex min-h-[400px] flex-col items-center justify-center rounded-2xl bg-white text-center shadow-sm">
-                    <Search
-                      size={38}
-                      className="mb-4 text-gray-300"
-                    />
+                {/* MOBILE COUNT */}
 
-                    <h2 className="text-xl font-semibold text-gray-900">
-                      No products found
-                    </h2>
+                <div className="mb-5 flex items-center justify-between lg:hidden">
 
-                    <p className="mt-2 text-sm text-gray-500">
-                      Try another search or category.
-                    </p>
-                  </div>
-                ) : (
+                  <p className="text-sm text-gray-500">
+
+                    <span className="font-semibold text-gray-900">
+                      {filteredProducts.length}
+                    </span>{" "}
+                    products found
+
+                  </p>
+
+                  {(category !== "All" || search || sort !== "default") && (
+
+                    <button
+                      onClick={clearFilters}
+                      className="text-xs font-semibold text-green-600"
+                    >
+                      Clear filter
+                    </button>
+
+                  )}
+
+                </div>
+
+                {/* LOADING */}
+
+                {loading ? (
+
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
 
-                    {filteredProducts.map((product) => (
-                      <article
-                        key={product.id}
-                        className="group overflow-hidden rounded-2xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    {[1, 2, 3, 4, 5, 6].map((item) => (
+
+                      <div
+                        key={item}
+                        className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm"
                       >
 
-                        {/* IMAGE */}
-                        <div className="relative aspect-square overflow-hidden bg-gray-100">
+                        <div className="aspect-square animate-pulse bg-gray-200" />
 
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                          />
+                        <div className="space-y-3 p-5">
 
-                          <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-xs font-semibold text-green-700 shadow-sm">
-                            Organic
-                          </span>
+                          <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
 
-                          <button
-                            onClick={() =>
-                              toggleWishlist(product.id)
-                            }
-                            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm transition hover:scale-105"
-                          >
-                            <Heart
-                              size={17}
-                              className={
-                                wishlist.includes(product.id)
-                                  ? "fill-red-500 text-red-500"
-                                  : "text-gray-600"
-                              }
-                            />
-                          </button>
+                          <div className="h-5 w-full animate-pulse rounded bg-gray-200" />
+
+                          <div className="h-5 w-2/3 animate-pulse rounded bg-gray-200" />
+
+                          <div className="h-10 w-full animate-pulse rounded-2xl bg-gray-200" />
 
                         </div>
 
-                        {/* DETAILS */}
-                        <div className="p-5">
+                      </div>
 
-                          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-green-600">
-                            {product.category}
-                          </p>
-
-                          <h3 className="line-clamp-2 min-h-[48px] text-base font-semibold text-gray-900">
-                            {product.name}
-                          </h3>
-
-                          {/* Rating */}
-                          <div className="mt-3 flex items-center gap-2">
-
-                            <div className="flex items-center gap-0.5">
-                              <Star
-                                size={14}
-                                className="fill-yellow-400 text-yellow-400"
-                              />
-
-                              <span className="text-xs font-semibold text-gray-700">
-                                {product.rating}
-                              </span>
-                            </div>
-
-                            <span className="text-xs text-gray-400">
-                              ({product.reviews})
-                            </span>
-
-                          </div>
-
-                          {/* Price */}
-                          <div className="mt-4 flex items-center gap-2">
-                            <span className="text-lg font-bold text-gray-900">
-                              ₹{product.price}
-                            </span>
-
-                            <span className="text-sm text-gray-400 line-through">
-                              ₹{product.oldPrice}
-                            </span>
-                          </div>
-
-                          {/* Add cart */}
-                          <button
-                            className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
-                          >
-                            <ShoppingBasket size={17} />
-                            Add to Cart
-                          </button>
-
-                        </div>
-                      </article>
                     ))}
 
                   </div>
+
+                ) : filteredProducts.length === 0 ? (
+
+                  /* ================= EMPTY ================= */
+
+                  <div className="flex min-h-[450px] flex-col items-center justify-center rounded-3xl border border-gray-100 bg-white px-5 text-center shadow-sm">
+
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-green-50">
+
+                      <Search
+                        size={28}
+                        className="text-green-500"
+                      />
+
+                    </div>
+
+                    <h2 className="mt-5 text-xl font-bold text-gray-900">
+                      No products found
+                    </h2>
+
+                    <p className="mt-2 max-w-sm text-sm leading-6 text-gray-500">
+                      We couldn't find anything matching your search.
+                      Try another keyword or category.
+                    </p>
+
+                    <button
+                      onClick={clearFilters}
+                      className="mt-6 rounded-full bg-green-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
+                    >
+                      Clear Filters
+                    </button>
+
+                  </div>
+
+                ) : (
+
+                  /* ================= PRODUCT GRID ================= */
+
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+
+                    {filteredProducts.map((product) => {
+
+                      const oldPrice = getOldPrice(
+                        product.price,
+                        product.discount
+                      );
+
+                      const imageUrl = product.image
+                        ? `${API_URL}/uploads/${product.image}`
+                        : "/fallback-product.png";
+
+                      return (
+
+                        <article
+                          key={product._id}
+                          className="group overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-gray-200/60"
+                        >
+
+                          {/* ================= IMAGE ================= */}
+
+                          <div className="relative aspect-square overflow-hidden bg-gray-100">
+
+                            <img
+                              src={imageUrl}
+                              alt={product.title || "Product"}
+                              className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                              onError={(e) => {
+                                e.currentTarget.src =
+                                  "/fallback-product.png";
+                              }}
+                            />
+
+                            {/* Gradient */}
+
+                            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition group-hover:opacity-100" />
+
+                            {/* Organic */}
+
+                            <span className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-green-700 shadow-sm backdrop-blur">
+
+                              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+
+                              ORGANIC
+
+                            </span>
+
+                            {/* Wishlist */}
+
+                            <button
+                              onClick={() =>
+                                toggleWishlist(product._id)
+                              }
+                              aria-label="Add to wishlist"
+                              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 shadow-sm backdrop-blur transition duration-200 hover:scale-110"
+                            >
+
+                              <Heart
+                                size={18}
+                                className={
+                                  wishlist.includes(product._id)
+                                    ? "fill-red-500 text-red-500"
+                                    : "text-gray-600"
+                                }
+                              />
+
+                            </button>
+
+                          </div>
+
+                          {/* ================= DETAILS ================= */}
+
+                          <div className="p-5">
+
+                            <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-green-600">
+                              {product.category}
+                            </p>
+
+                            <h3 className="line-clamp-2 min-h-[48px] text-base font-bold leading-6 text-gray-900">
+                              {product.title}
+                            </h3>
+
+                            {/* Rating */}
+
+                            <div className="mt-3 flex items-center gap-2">
+
+                              <div className="flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-1">
+
+                                <Star
+                                  size={13}
+                                  className="fill-yellow-400 text-yellow-400"
+                                />
+
+                                <span className="text-xs font-bold text-gray-700">
+                                  {product.rating || 0}
+                                </span>
+
+                              </div>
+
+                              <span className="text-xs text-gray-400">
+                                {product.reviewCount || 0} reviews
+                              </span>
+
+                            </div>
+
+                            {/* Price */}
+
+                            <div className="mt-4 flex items-end justify-between">
+
+                              <div className="flex items-center gap-2">
+
+                                <span className="text-xl font-extrabold text-gray-900">
+                                  ₹{product.price}
+                                </span>
+
+                                {oldPrice && (
+                                  <span className="text-sm text-gray-400 line-through">
+                                    ₹{oldPrice}
+                                  </span>
+                                )}
+
+                              </div>
+
+                              {product.discount > 0 && (
+
+                                <span className="rounded-full bg-green-50 px-2.5 py-1 text-[10px] font-bold text-green-700">
+                                  {product.discount}% OFF
+                                </span>
+
+                              )}
+
+                            </div>
+
+                            {/* Size */}
+
+                            {product.size && (
+
+                              <p className="mt-2 text-xs text-gray-500">
+                                Pack:{" "}
+                                <span className="font-semibold text-gray-700">
+                                  {product.size}
+                                </span>
+                              </p>
+
+                            )}
+
+                            {/* Cart */}
+
+                            <button
+                              className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-green-600 px-4 py-3.5 text-sm font-bold text-white shadow-sm shadow-green-600/20 transition duration-200 hover:bg-green-700 hover:shadow-md active:scale-[0.98]"
+                            >
+
+                              <ShoppingBasket size={17} />
+
+                              Add to Cart
+
+                            </button>
+
+                          </div>
+
+                        </article>
+
+                      );
+
+                    })}
+
+                  </div>
+
                 )}
 
               </div>
 
             </div>
+
           </div>
+
         </section>
+
       </div>
     </Layout>
   );

@@ -1,39 +1,38 @@
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Star,
   Heart,
-  ShoppingCart,
-  Plus,
-  Minus,
+  ArrowRight,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+import api, { API_URL } from "../api/api";
 
 function SellingProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [quantities, setQuantities] = useState({});
 
-  // Mobile par jis product ko open kiya hai
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  // ==========================================
+  // FETCH SELLING PRODUCTS
+  // ==========================================
 
-  // ================= GET PRODUCTS =================
   const getProducts = async () => {
     try {
-      const response = await axios.get( 
-        "http://localhost:5000/api/Products/getAllProducts"
-      );
+      setLoading(true);
 
-      console.log("Products from backend:", response.data);
+      const res = await api.post("/Products/selling");
 
-      setProducts(response.data.data || []);
+      console.log("Selling Products:", res.data);
+
+      setProducts(res.data.data || []);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      console.error("Error fetching selling products:", error);
 
       if (error.response) {
         console.log("Status:", error.response.status);
         console.log("Response:", error.response.data);
       }
+
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -43,516 +42,551 @@ function SellingProducts() {
     getProducts();
   }, []);
 
-  // ================= INCREASE =================
-  const increaseQuantity = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: (prev[id] || 1) + 1,
-    }));
-  };
+  // ==========================================
+  // LOADING
+  // ==========================================
 
-  // ================= DECREASE =================
-  const decreaseQuantity = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: Math.max((prev[id] || 1) - 1, 1),
-    }));
-  };
+  if (loading) {
+    return (
+      <section className="w-full bg-[#f7faf8] py-10 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-  // ================= OPEN PRODUCT ON MOBILE =================
-  const handleProductClick = (id) => {
-    setSelectedProduct((prev) =>
-      prev === id ? null : id
+          {/* Header Skeleton */}
+          <div className="mb-7">
+            <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
+
+            <div className="mt-3 h-7 w-60 animate-pulse rounded bg-gray-200" />
+          </div>
+
+          {/* Product Skeleton */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {[1, 2, 3, 4, 5].map((item) => (
+              <div
+                key={item}
+                className="
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  border-gray-100
+                  bg-white
+                "
+              >
+                <div className="h-36 animate-pulse bg-gray-200 sm:h-40" />
+
+                <div className="space-y-3 p-3">
+                  <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-5 w-20 animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-8 animate-pulse rounded-lg bg-gray-200" />
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
     );
-  };
+  }
+
+  // ==========================================
+  // MAIN UI
+  // ==========================================
 
   return (
-    <section className="w-full bg-white py-8 sm:py-10 lg:py-12">
+    <section className="w-full bg-[#f7faf8] py-10 sm:py-12 lg:py-14">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        {/* ================= HEADING ================= */}
-        <div className="flex items-center justify-between mb-7 sm:mb-8">
+        {/* ==========================================
+            HEADER
+        ========================================== */}
 
-          <h2
+        <div className="mb-7 flex items-end justify-between sm:mb-8">
+
+          <div>
+            <p
+              className="
+                mb-1
+                text-[10px]
+                font-semibold
+                uppercase
+                tracking-[2px]
+                text-green-600
+                sm:text-xs
+              "
+            >
+              Our Products
+            </p>
+
+            <h2
+              className="
+                text-2xl
+                font-bold
+                text-gray-900
+                sm:text-3xl
+                lg:text-4xl
+              "
+            >
+              Best Selling Products
+            </h2>
+          </div>
+
+          {/* DESKTOP NICE VIEW */}
+
+          <Link
+            to="/products"
             className="
-              text-xl
-              sm:text-2xl
-              md:text-3xl
-              font-bold
-              text-gray-900
-            "
-          >
-            Best selling products
-          </h2>
-
-          <button
-            type="button"
-            className="
+              hidden
+              items-center
+              gap-1.5
+              rounded-full
               bg-green-600
-              hover:bg-green-700
-              text-white
-              text-xs
-              sm:text-sm
-              font-medium
               px-4
-              sm:px-5
               py-2
-              sm:py-2.5
-              rounded-md
+              text-xs
+              font-semibold
+              text-white
+              shadow-sm
+              transition-all
+              duration-300
+              hover:bg-green-700
+              hover:shadow-md
+              sm:flex
             "
           >
-            View All
-          </button>
+            Nice View
+            <ArrowRight size={14} />
+          </Link>
 
         </div>
 
-        {/* ================= LOADING ================= */}
-        {loading && (
-          <div className="text-center py-10 text-gray-500">
-            Loading products...
-          </div>
-        )}
+        {/* ==========================================
+            NO PRODUCTS
+        ========================================== */}
 
-        {/* ================= NO PRODUCTS ================= */}
-        {!loading && products.length === 0 && (
-          <div className="text-center py-10 text-gray-500">
-            No products found.
-          </div>
-        )}
+        {products.length === 0 ? (
 
-        {/* ================= PRODUCTS ================= */}
-        {!loading && products.length > 0 && (
+          <div
+            className="
+              rounded-2xl
+              bg-white
+              py-14
+              text-center
+              shadow-sm
+            "
+          >
+            <p className="text-sm text-gray-500">
+              No selling products available.
+            </p>
+          </div>
+
+        ) : (
+
+          /* ==========================================
+              PRODUCT GRID
+          ========================================== */
 
           <div
             className="
               grid
               grid-cols-2
+              gap-4
               sm:grid-cols-3
-              md:grid-cols-4
-              lg:grid-cols-5
-
-              gap-x-3
-              sm:gap-x-5
-              lg:gap-x-6
-
-              gap-y-8
-              sm:gap-y-10
+              sm:gap-5
+              lg:grid-cols-4
+              lg:gap-6
+              xl:grid-cols-5
             "
           >
 
             {products.map((item) => {
 
-              // ================= PRICE =================
+              // ==========================================
+              // PRICE
+              // ==========================================
+
               const price = Number(item.price || 0);
+
               const discount = Number(item.discount || 0);
 
               const discountedPrice =
-                price - (price * discount) / 100;
+                discount > 0
+                  ? price - (price * discount) / 100
+                  : price;
 
-              // ================= QUANTITY =================
-              const quantity = quantities[item._id] || 1;
+              const saveAmount =
+                discount > 0
+                  ? Math.round(price - discountedPrice)
+                  : 0;
 
-              // Mobile product open hai ya nahi
-              const isSelected =
-                selectedProduct === item._id;
+              // ==========================================
+              // RATING
+              // ==========================================
+
+              const rating = Number(item.rating || 4.8);
+
+              const reviews =
+                item.reviewCount ||
+                item.reviews ||
+                0;
+
+              // ==========================================
+              // IMAGE
+              // ==========================================
+
+              const imageUrl =
+                item.image?.startsWith("http")
+                  ? item.image
+                  : `${API_URL}/uploads/${item.image}`;
 
               return (
-
                 <div
                   key={item._id}
-                  onClick={() => handleProductClick(item._id)}
                   className="
                     group
-                    relative
+                    overflow-hidden
+                    rounded-2xl
+                    border
+                    border-gray-100
                     bg-white
-                    rounded-lg
-                    cursor-pointer
+                    shadow-[0_3px_12px_rgba(0,0,0,0.05)]
+                    transition-all
+                    duration-300
+                    hover:-translate-y-1
+                    hover:shadow-lg
                   "
                 >
 
-                  {/* ================= IMAGE ================= */}
-                  <div
+                  {/* ==========================================
+                      PRODUCT IMAGE
+                  ========================================== */}
+
+                  <Link
+                    to={`/product/${item._id}`}
                     className="
                       relative
-                      w-full
-
+                      block
                       h-36
+                      overflow-hidden
+                      bg-[#eaf5ed]
                       sm:h-40
                       md:h-44
-
-                      flex
-                      items-center
-                      justify-center
-
-                      overflow-hidden
-                      rounded-lg
-                      bg-white
                     "
                   >
 
-                    <img
-                      src={`http://localhost:5000/uploads/${item.image}`}
-                      alt={item.title}
+                    {/* ORGANIC BADGE */}
+                    {/* 
+                    <div
                       className="
-                        w-full
-                        h-full
-                        object-contain
+                        absolute
+                        left-2.5
+                        top-2.5
+                        z-20
+                        flex
+                        items-center
+                        gap-1
+                        rounded-full
+                        bg-white
+                        px-2.5
+                        py-1
+                        text-[8px]
+                        font-bold
+                        uppercase
+                        tracking-wide
+                        text-green-700
+                        shadow-sm
+                        sm:left-3
+                        sm:top-3
+                        sm:px-3
+                        sm:py-1.5
+                        sm:text-[9px]
                       "
-                    />
+                    >
+                      <span
+                        className="
+                          h-1.5
+                          w-1.5
+                          rounded-full
+                          bg-green-500
+                        "
+                      />
 
-                    {/* ================= TOP WISHLIST ================= */}
+                      ORGANIC
+                    </div> */}
+
+                    {/* WISHLIST */}
+
                     <button
                       type="button"
                       aria-label="Add to wishlist"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
+
+                        console.log(
+                          "Wishlist:",
+                          item.title
+                        );
                       }}
                       className="
                         absolute
-                        top-2
-                        right-2
-                        z-10
-
-                        w-8
-                        h-8
-                        sm:w-9
-                        sm:h-9
-
-                        rounded-full
-                        bg-white
-                        shadow
-
+                        right-2.5
+                        top-2.5
+                        z-30
                         flex
+                        h-8
+                        w-8
                         items-center
                         justify-center
-
-                        /* MOBILE: ALWAYS VISIBLE */
-                        opacity-100
-
-                        /* DESKTOP: HOVER ONLY */
-                        sm:opacity-0
-                        sm:group-hover:opacity-100
-
+                        rounded-full
+                        bg-white
+                        text-gray-600
+                        shadow-sm
+                        transition-all
+                        duration-300
                         hover:bg-green-600
                         hover:text-white
+                        sm:right-3
+                        sm:top-3
+                        sm:h-9
+                        sm:w-9
                       "
                     >
                       <Heart
                         size={15}
-                        className="sm:w-[17px] sm:h-[17px]"
+                        strokeWidth={1.8}
                       />
                     </button>
 
-                  </div>
+                    {/* IMAGE */}
 
-                  {/* ================= PRODUCT INFO ================= */}
-                  <div className="pt-3">
-
-                    {/* ================= TITLE ================= */}
-                    <h3
+                    <img
+                      src={imageUrl}
+                      alt={item.title || "Product"}
                       className="
-                        text-xs
-                        sm:text-sm
+                        h-full
+                        w-full
+                        object-cover
+                        transition-transform
+                        duration-500
+                        group-hover:scale-105
+                      "
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          // "https://via.placeholder.com/500x500?text=Product";
 
-                        text-gray-800
-                        font-medium
-                        leading-5
+                          e.currentTarget.src = "/default-product.jpg";
+                      }}
+                    />
 
-                        min-h-[40px]
-                        line-clamp-2
+                  </Link>
+
+                  {/* ==========================================
+                      PRODUCT DETAILS
+                  ========================================== */}
+
+                  <div className="p-3 sm:p-3.5">
+
+                    {/* CATEGORY */}
+
+                    <p
+                      className="
+                        mb-1
+                        truncate
+                        text-[8px]
+                        font-bold
+                        uppercase
+                        tracking-[1.3px]
+                        text-green-600
+                        sm:text-[9px]
                       "
                     >
-                      {item.title}
-                    </h3>
+                      {item.category || "Fruits & Vegetables"}
+                    </p>
 
-                    {/* ================= RATING ================= */}
+                    {/* TITLE */}
+
+                    <Link
+                      to={`/product/${item._id}`}
+                      className="
+                        block
+                        min-h-[34px]
+                        line-clamp-2
+                        text-[12px]
+                        font-bold
+                        leading-[17px]
+                        text-gray-900
+                        transition-colors
+                        hover:text-green-700
+                        sm:text-[13px]
+                      "
+                    >
+                      {item.title || "Organic Fresh Product"}
+                    </Link>
+
+                    {/* ==========================================
+                        RATING
+                    ========================================== */}
+
                     <div
                       className="
+                        mt-2.5
                         flex
                         items-center
-                        gap-0.5
-                        sm:gap-1
-                        mt-2
+                        gap-1.5
                       "
                     >
 
-                      {[1, 2, 3, 4, 5].map((star) => (
+                      <div
+                        className="
+                          flex
+                          items-center
+                          gap-1
+                          rounded-full
+                          bg-yellow-50
+                          px-1.5
+                          py-0.5
+                        "
+                      >
                         <Star
-                          key={star}
                           size={12}
+                          strokeWidth={2}
                           className="
-                            sm:w-[14px]
-                            sm:h-[14px]
                             fill-yellow-400
                             text-yellow-400
                           "
                         />
-                      ))}
+
+                        <span
+                          className="
+                            text-[10px]
+                            font-bold
+                            text-gray-800
+                          "
+                        >
+                          {rating.toFixed(1)}
+                        </span>
+                      </div>
 
                       <span
                         className="
-                          text-[10px]
-                          sm:text-xs
-                          text-gray-500
-                          ml-1
+                          truncate
+                          text-[9px]
+                          text-gray-400
+                          sm:text-[10px]
                         "
                       >
-                        ({item.reviews || 222})
+                        {reviews > 0
+                          ? `${reviews} reviews`
+                          : "Top Rated"}
                       </span>
 
                     </div>
 
-                    {/* ================= PRICE ================= */}
+                    {/* ==========================================
+                        PRICE
+                    ========================================== */}
+
                     <div
                       className="
+                        mt-2.5
                         flex
                         items-center
-                        gap-1
-                        sm:gap-2
-                        mt-2
-                        flex-wrap
+                        justify-between
+                        gap-1.5
                       "
                     >
 
-                      {/* OLD PRICE */}
-                      <span
+                      <div
                         className="
-                          text-[11px]
-                          sm:text-sm
-                          text-gray-400
-                          line-through
+                          flex
+                          items-center
+                          gap-1.5
                         "
                       >
-                        ₹{price.toFixed(2)}
-                      </span>
+                        <span
+                          className="
+                            text-base
+                            font-extrabold
+                            text-gray-900
+                            sm:text-lg
+                          "
+                        >
+                          ₹{discountedPrice.toFixed(0)}
+                        </span>
 
-                      {/* CURRENT PRICE */}
-                      <span
-                        className="
-                          text-sm
-                          sm:text-base
-                          font-bold
-                          text-gray-900
-                        "
-                      >
-                        ₹{discountedPrice.toFixed(2)}
-                      </span>
+                        {discount > 0 && (
+                          <span
+                            className="
+                              text-[9px]
+                              text-gray-400
+                              line-through
+                              sm:text-[10px]
+                            "
+                          >
+                            ₹{price.toFixed(0)}
+                          </span>
+                        )}
+                      </div>
 
-                      {/* DISCOUNT */}
+                      {/* SAVE */}
+
                       {discount > 0 && (
                         <span
                           className="
-                            text-[8px]
-                            sm:text-[10px]
-
-                            text-gray-500
-
-                            border
-                            border-gray-300
-
-                            px-1
-                            sm:px-1.5
-
+                            rounded-full
+                            bg-green-50
+                            px-1.5
                             py-0.5
-
-                            rounded-sm
+                            text-[8px]
+                            font-bold
+                            text-green-600
+                            sm:px-2
+                            sm:text-[9px]
                           "
                         >
-                          {discount}% OFF
+                          SAVE ₹{saveAmount}
                         </span>
                       )}
 
                     </div>
 
-                    {/* ================================================= */}
-                    {/* CART AREA                                         */}
-                    {/* ================================================= */}
+                    {/* ==========================================
+                        DESKTOP ONLY VIEW BUTTON
+                    ========================================== */}
 
-                    <div
-                      className={`
-                        flex
-                        items-center
-                        gap-1
-                        sm:gap-1.5
-                        mt-3
-                        overflow-hidden
-
-                        /* MOBILE */
-                        ${isSelected
-                          ? "opacity-100 h-10"
-                          : "opacity-0 h-0"
-                        }
-
-                        /* DESKTOP */
-                        sm:opacity-0
-                        sm:h-0
-                        sm:group-hover:opacity-100
-                        sm:group-hover:h-10
-                      `}
-                    >
-
-                      {/* ================= QUANTITY ================= */}
-                      <div
+                    <div className="mt-3 hidden sm:flex">
+                      <Link
+                        to={`/product/${item._id}`}
                         className="
                           flex
+                          h-9
+                          w-full
                           items-center
-
-                          border
-                          border-gray-300
-                          rounded-md
-
-                          h-8
-                          sm:h-9
-
-                          shrink-0
-                        "
-                      >
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            decreaseQuantity(item._id);
-                          }}
-                          className="
-                            w-6
-                            sm:w-7
-                            h-full
-
-                            flex
-                            items-center
-                            justify-center
-
-                            hover:bg-gray-100
-                          "
-                        >
-                          <Minus size={12} />
-                        </button>
-
-                        <span
-                          className="
-                            w-5
-                            sm:w-6
-
-                            text-center
-                            text-xs
-                            sm:text-sm
-                          "
-                        >
-                          {quantity}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            increaseQuantity(item._id);
-                          }}
-                          className="
-                            w-6
-                            sm:w-7
-                            h-full
-
-                            flex
-                            items-center
-                            justify-center
-
-                            hover:bg-gray-100
-                          "
-                        >
-                          <Plus size={12} />
-                        </button>
-
-                      </div>
-
-                      {/* ================= ADD TO CART ================= */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-
-                          console.log(
-                            "Add to cart:",
-                            item.title,
-                            "Quantity:",
-                            quantity
-                          );
-                        }}
-                        className="
-                          flex-1
-
-                          h-8
-                          sm:h-9
-
+                          justify-center
+                          gap-1.5
+                          rounded-lg
                           bg-green-600
-                          hover:bg-green-700
-
+                          text-[11px]
+                          font-bold
                           text-white
-
-                          rounded-md
-
-                          flex
-                          items-center
-                          justify-center
-
-                          gap-1
-
-                          text-[10px]
-                          sm:text-xs
-
-                          font-medium
-
-                          min-w-0
+                          shadow-sm
+                          transition-all
+                          duration-300
+                          hover:bg-green-700
+                          hover:shadow-md
+                          active:scale-[0.98]
                         "
                       >
+                        View
 
-                        <ShoppingCart
-                          size={13}
-                          className="shrink-0"
-                        />
-
-                        <span className="truncate">
-                          Add to Cart
-                        </span>
-
-                      </button>
-
-                      {/* ================= BOTTOM WISHLIST ================= */}
-                      <button
-                        type="button"
-                        aria-label="Add to wishlist"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                        className="
-                          hidden
-                          sm:flex
-
-                          w-8
-                          sm:w-9
-
-                          h-8
-                          sm:h-9
-
-                          shrink-0
-
-                          border
-                          border-gray-300
-
-                          rounded-md
-
-                          items-center
-                          justify-center
-
-                          hover:bg-green-600
-                          hover:text-white
-                          hover:border-green-600
-                        "
-                      >
-                        <Heart size={14} />
-                      </button>
-
+                        <ArrowRight size={13} />
+                      </Link>
                     </div>
 
                   </div>
@@ -564,8 +598,40 @@ function SellingProducts() {
           </div>
         )}
 
-      </div>
+        {/* ==========================================
+            MOBILE NICE VIEW
+        ========================================== */}
 
+        {products.length > 0 && (
+          <div className="mt-7 flex justify-center sm:hidden">
+
+            <Link
+              to="/products"
+              className="
+                flex
+                items-center
+                gap-1.5
+                rounded-full
+                bg-green-600
+                px-5
+                py-2.5
+                text-xs
+                font-semibold
+                text-white
+                shadow-sm
+                transition
+                hover:bg-green-700
+              "
+            >
+              Nice View
+
+              <ArrowRight size={14} />
+            </Link>
+
+          </div>
+        )}
+
+      </div>
     </section>
   );
 }

@@ -1,49 +1,48 @@
 
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   Star,
   Heart,
-  ShoppingCart,
-  Plus,
-  Minus,
+  ArrowRight,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
-const PopularProducts = () => {
+function PopularProducts() {
   const [products, setProducts] = useState([]);
-  console.log(products)
   const [loading, setLoading] = useState(true);
-  const [quantities, setQuantities] = useState({});
 
-  // Mobile par selected product
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
-  // =====================================================
-  // GET PRODUCTS
-  // =====================================================
+  // ==========================================
+  // FETCH POPULAR PRODUCTS
+  // ==========================================
 
   const getProducts = async () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:5000/api/Products/getAllProducts"
+      const res = await axios.post(
+        "http://localhost:5000/api/Products/Popular"
       );
 
-      console.log("Popular Products:", response.data);
+      console.log("Popular Products:", res.data);
 
-      setProducts(response.data.data || []);
-      // const PopularProducts = allproducts.filter(
-      //   (product) => product.section === "popular"
-      // );
-     // setProducts=(PopularProducts)
-
+      setProducts(res.data.data || []);
     } catch (error) {
-      console.log("Error fetching popular products:", error);
+      console.log(
+        "Error fetching popular products:",
+        error
+      );
 
       if (error.response) {
-        console.log("Status:", error.response.status);
-        console.log("Response:", error.response.data);
+        console.log(
+          "Status:",
+          error.response.status
+        );
+
+        console.log(
+          "Response:",
+          error.response.data
+        );
       }
 
       setProducts([]);
@@ -52,658 +51,612 @@ const PopularProducts = () => {
     }
   };
 
-  // =====================================================
+  // ==========================================
   // USE EFFECT
-  // =====================================================
+  // ==========================================
 
   useEffect(() => {
     getProducts();
   }, []);
 
-  // =====================================================
-  // INCREASE
-  // =====================================================
+  // ==========================================
+  // LOADING
+  // ==========================================
 
-  const increaseQuantity = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: (prev[id] || 1) + 1,
-    }));
-  };
+  if (loading) {
+    return (
+      <section className="w-full bg-[#f7faf8] py-10 sm:py-12">
 
-  // =====================================================
-  // DECREASE
-  // =====================================================
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-  const decreaseQuantity = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: Math.max((prev[id] || 1) - 1, 1),
-    }));
-  };
+          {/* HEADER SKELETON */}
 
-  // =====================================================
-  // MOBILE PRODUCT CLICK
-  // =====================================================
+          <div className="mb-7">
+            <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
 
-  const handleProductClick = (id) => {
-    setSelectedProduct((prev) =>
-      prev === id ? null : id
-    );
-  };
-
-  return (
-    <section className="w-full bg-white py-8 sm:py-10 lg:py-12">
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
-        {/* ================================================= */}
-        {/* HEADING */}
-        {/* ================================================= */}
-
-        <div className="flex items-center justify-between mb-7 sm:mb-8">
-
-          <div>
-            <p className="text-xs sm:text-sm text-green-600 font-medium mb-1">
-              Our Products
-            </p>
-
-            <h2
-              className="
-                text-xl
-                sm:text-2xl
-                md:text-3xl
-                font-bold
-                text-gray-900
-              "
-            >
-              Popular Products
-            </h2>
+            <div className="mt-3 h-7 w-60 animate-pulse rounded bg-gray-200" />
           </div>
 
-          <button
-            type="button"
-            className="
-              bg-green-600
-              hover:bg-green-700
-              text-white
-              text-xs
-              sm:text-sm
-              font-medium
-              px-4
-              sm:px-5
-              py-2
-              sm:py-2.5
-              rounded-md
-              transition
-            "
-          >
-            View All
-          </button>
-
-        </div>
-
-        {/* ================================================= */}
-        {/* LOADING */}
-        {/* ================================================= */}
-
-        {loading && (
-          <div className="text-center py-10 text-gray-500">
-            Loading products...
-          </div>
-        )}
-
-        {/* ================================================= */}
-        {/* NO PRODUCTS */}
-        {/* ================================================= */}
-
-        {!loading && products.length === 0 && (
-          <div className="text-center py-10 text-gray-500">
-            No products found.
-          </div>
-        )}
-
-        {/* ================================================= */}
-        {/* PRODUCTS */}
-        {/* ================================================= */}
-
-        {!loading && products.length > 0 && (
+          {/* PRODUCT SKELETON */}
 
           <div
             className="
               grid
               grid-cols-2
+              gap-4
               sm:grid-cols-3
-              md:grid-cols-4
-              lg:grid-cols-5
+              lg:grid-cols-4
+              xl:grid-cols-5
+            "
+          >
 
-              gap-x-3
-              sm:gap-x-5
-              lg:gap-x-6
+            {[1, 2, 3, 4, 5].map((item) => (
+              <div
+                key={item}
+                className="
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  border-gray-100
+                  bg-white
+                "
+              >
 
-              gap-y-8
-              sm:gap-y-10
+                <div className="h-36 animate-pulse bg-gray-200 sm:h-40" />
+
+                <div className="space-y-3 p-3">
+
+                  <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-5 w-20 animate-pulse rounded bg-gray-200" />
+
+                  <div className="h-8 animate-pulse rounded-lg bg-gray-200" />
+
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+    );
+  }
+
+  // ==========================================
+  // MAIN UI
+  // ==========================================
+
+  return (
+    <section className="w-full bg-[#f7faf8] py-10 sm:py-12 lg:py-14">
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        {/* ==========================================
+            HEADER
+        ========================================== */}
+
+        <div className="mb-7 flex items-end justify-between sm:mb-8">
+
+          <div>
+
+            <p
+              className="
+                mb-1
+                text-[10px]
+                font-semibold
+                uppercase
+                tracking-[2px]
+                text-green-600
+                sm:text-xs
+              "
+            >
+              Our Products
+            </p>
+
+            <h2
+              className="
+                text-2xl
+                font-bold
+                text-gray-900
+                sm:text-3xl
+                lg:text-4xl
+              "
+            >
+              Popular Products
+            </h2>
+
+          </div>
+
+          {/* DESKTOP VIEW ALL */}
+
+          <Link
+            to="/products"
+            className="
+              hidden
+              items-center
+              gap-1.5
+              rounded-full
+              bg-green-600
+              px-4
+              py-2
+              text-xs
+              font-semibold
+              text-white
+              shadow-sm
+              transition-all
+              duration-300
+              hover:bg-green-700
+              hover:shadow-md
+              sm:flex
+            "
+          >
+            View All
+
+            <ArrowRight size={14} />
+
+          </Link>
+
+        </div>
+
+        {/* ==========================================
+            NO PRODUCTS
+        ========================================== */}
+
+        {products.length === 0 ? (
+
+          <div
+            className="
+              rounded-2xl
+              bg-white
+              py-14
+              text-center
+              shadow-sm
+            "
+          >
+
+            <p className="text-sm text-gray-500">
+              No popular products available.
+            </p>
+
+          </div>
+
+        ) : (
+
+          /* ==========================================
+              PRODUCT GRID
+          ========================================== */
+
+          <div
+            className="
+              grid
+              grid-cols-2
+              gap-4
+              sm:grid-cols-3
+              sm:gap-5
+              lg:grid-cols-4
+              lg:gap-6
+              xl:grid-cols-5
             "
           >
 
             {products.map((item) => {
 
-              // =================================================
+              // ==========================================
               // PRICE
-              // =================================================
+              // ==========================================
 
-              const price = Number(item.price || 0);
+              const price = Number(
+                item.price || 0
+              );
 
-              const discount = Number(item.discount || 0);
+              const discount = Number(
+                item.discount || 0
+              );
 
               const discountedPrice =
-                price - (price * discount) / 100;
+                discount > 0
+                  ? price -
+                    (price * discount) / 100
+                  : price;
 
-              // =================================================
-              // QUANTITY
-              // =================================================
+              const saveAmount =
+                discount > 0
+                  ? Math.round(
+                      price - discountedPrice
+                    )
+                  : 0;
 
-              const quantity =
-                quantities[item._id] || 1;
+              // ==========================================
+              // RATING
+              // ==========================================
 
-              // =================================================
-              // MOBILE SELECTED
-              // =================================================
+              const rating = Number(
+                item.rating || 4.8
+              );
 
-              const isSelected =
-                selectedProduct === item._id;
+              const reviews =
+                item.reviewCount ||
+                item.reviews ||
+                0;
+
+              // ==========================================
+              // IMAGE
+              // ==========================================
+
+              const imageUrl =
+                item.image?.startsWith("http")
+                  ? item.image
+                  : `http://localhost:5000/uploads/${item.image}`;
 
               return (
 
                 <div
                   key={item._id}
-                  onClick={() =>
-                    handleProductClick(item._id)
-                  }
                   className="
                     group
-                    relative
+                    overflow-hidden
+                    rounded-2xl
+                    border
+                    border-gray-100
                     bg-white
-                    rounded-lg
-                    cursor-pointer
+                    shadow-[0_3px_12px_rgba(0,0,0,0.05)]
+                    transition-all
+                    duration-300
+                    hover:-translate-y-1
+                    hover:shadow-lg
                   "
                 >
 
-                  {/* ================================================= */}
-                  {/* IMAGE */}
-                  {/* ================================================= */}
+                  {/* ==========================================
+                      PRODUCT IMAGE
+                  ========================================== */}
 
-                  <div
+                  <Link
+                    to={`/product/${item._id}`}
                     className="
                       relative
-                      w-full
-
+                      block
                       h-36
+                      overflow-hidden
+                      bg-[#eaf5ed]
                       sm:h-40
                       md:h-44
-
-                      flex
-                      items-center
-                      justify-center
-
-                      overflow-hidden
-                      rounded-lg
-                      bg-white
                     "
                   >
 
-                    {/* DISCOUNT */}
+                    {/* POPULAR BADGE */}
 
-                    {discount > 0 && (
+                    {/* <div
+                      className="
+                        absolute
+                        left-2.5
+                        top-2.5
+                        z-20
+                        flex
+                        items-center
+                        gap-1
+                        rounded-full
+                        bg-white
+                        px-2.5
+                        py-1
+                        text-[8px]
+                        font-bold
+                        uppercase
+                        tracking-wide
+                        text-green-700
+                        shadow-sm
+                        sm:left-3
+                        sm:top-3
+                        sm:px-3
+                        sm:py-1.5
+                        sm:text-[9px]
+                      "
+                    >
+
                       <span
                         className="
-                          absolute
-                          top-2
-                          left-2
-                          z-10
-
-                          bg-white
-                          border
-                          border-gray-200
-
-                          text-gray-500
-                          text-[8px]
-                          sm:text-[10px]
-
-                          px-1.5
-                          sm:px-2
-
-                          py-0.5
-                          sm:py-1
-
-                          rounded-sm
+                          h-1.5
+                          w-1.5
+                          rounded-full
+                          bg-green-500
                         "
-                      >
-                        {discount}% OFF
-                      </span>
-                    )}
+                      />
 
-                    {/* PRODUCT IMAGE */}
+                      POPULAR
 
-                    <img
-                      src={`http://localhost:5000/uploads/${item.image}`}
-                      alt={item.title || "Product"}
-                      className="
-                        w-full
-                        h-full
-                        object-contain
-                      "
-                      onError={(e) => {
-                        e.currentTarget.style.display =
-                          "none";
-                      }}
-                    />
+                    </div> */}
 
-                    {/* ================================================= */}
-                    {/* TOP HEART */}
-                    {/* ================================================= */}
+                    {/* WISHLIST */}
 
                     <button
                       type="button"
                       aria-label="Add to wishlist"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
+
+                        console.log(
+                          "Wishlist:",
+                          item.title
+                        );
                       }}
                       className="
                         absolute
-                        top-2
-                        right-2
-                        z-10
-
-                        w-8
-                        h-8
-                        sm:w-9
-                        sm:h-9
-
-                        rounded-full
-                        bg-white
-                        shadow
-
+                        right-2.5
+                        top-2.5
+                        z-30
                         flex
+                        h-8
+                        w-8
                         items-center
                         justify-center
-
-                        opacity-100
-
-                        sm:opacity-0
-                        sm:group-hover:opacity-100
-
+                        rounded-full
+                        bg-white
+                        text-gray-600
+                        shadow-sm
+                        transition-all
+                        duration-300
                         hover:bg-green-600
                         hover:text-white
-
-                        transition
+                        sm:right-3
+                        sm:top-3
+                        sm:h-9
+                        sm:w-9
                       "
                     >
+
                       <Heart
                         size={15}
-                        className="
-                          sm:w-[17px]
-                          sm:h-[17px]
-                        "
+                        strokeWidth={1.8}
                       />
+
                     </button>
 
-                  </div>
+                    {/* IMAGE */}
 
-                  {/* ================================================= */}
-                  {/* PRODUCT INFO */}
-                  {/* ================================================= */}
+                    <img
+                      src={imageUrl}
+                      alt={
+                        item.title ||
+                        "Product"
+                      }
+                      className="
+                        h-full
+                        w-full
+                        object-cover
+                        transition-transform
+                        duration-500
+                        group-hover:scale-105
+                      "
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "https://via.placeholder.com/500x500?text=Product";
+                      }}
+                    />
 
-                  <div className="pt-3">
+                  </Link>
+
+                  {/* ==========================================
+                      PRODUCT DETAILS
+                  ========================================== */}
+
+                  <div className="p-3 sm:p-3.5">
+
+                    {/* CATEGORY */}
+
+                    <p
+                      className="
+                        mb-1
+                        truncate
+                        text-[8px]
+                        font-bold
+                        uppercase
+                        tracking-[1.3px]
+                        text-green-600
+                        sm:text-[9px]
+                      "
+                    >
+                      {item.category ||
+                        "Fruits & Vegetables"}
+                    </p>
 
                     {/* TITLE */}
 
-                    <h3
+                    <Link
+                      to={`/product/${item._id}`}
                       className="
-                        text-xs
-                        sm:text-sm
-
-                        text-gray-800
-                        font-medium
-                        leading-5
-
-                        min-h-[40px]
+                        block
+                        min-h-[34px]
                         line-clamp-2
+                        text-[12px]
+                        font-bold
+                        leading-[17px]
+                        text-gray-900
+                        transition-colors
+                        hover:text-green-700
+                        sm:text-[13px]
                       "
                     >
-                      {item.title || "Product"}
-                    </h3>
+                      {item.title ||
+                        "Organic Fresh Product"}
+                    </Link>
 
-                    {/* RATING */}
+                    {/* ==========================================
+                        RATING
+                    ========================================== */}
 
                     <div
                       className="
+                        mt-2.5
                         flex
                         items-center
-                        gap-0.5
-                        sm:gap-1
-                        mt-2
+                        gap-1.5
                       "
                     >
-
-                      <div className="flex items-center">
-
-                        {[1, 2, 3, 4, 5].map(
-                          (star) => (
-                            <Star
-                              key={star}
-                              size={12}
-                              className="
-                                sm:w-[14px]
-                                sm:h-[14px]
-                                fill-yellow-400
-                                text-yellow-400
-                              "
-                            />
-                          )
-                        )}
-
-                      </div>
-
-                      <span
-                        className="
-                          text-[10px]
-                          sm:text-xs
-                          text-gray-500
-                          ml-1
-                        "
-                      >
-                        ({item.reviews || item.reviewCount || 222})
-                      </span>
-
-                    </div>
-
-                    {/* PRICE */}
-
-                    <div
-                      className="
-                        flex
-                        items-center
-                        gap-1
-                        sm:gap-2
-                        mt-2
-                        flex-wrap
-                      "
-                    >
-
-                      {/* OLD PRICE */}
-
-                      {discount > 0 && (
-                        <span
-                          className="
-                            text-[11px]
-                            sm:text-sm
-                            text-gray-400
-                            line-through
-                          "
-                        >
-                          ₹{price.toFixed(2)}
-                        </span>
-                      )}
-
-                      {/* CURRENT PRICE */}
-
-                      <span
-                        className="
-                          text-sm
-                          sm:text-base
-                          font-bold
-                          text-gray-900
-                        "
-                      >
-                        ₹
-                        {discount > 0
-                          ? discountedPrice.toFixed(2)
-                          : price.toFixed(2)}
-                      </span>
-
-                      {/* DISCOUNT */}
-
-                      {discount > 0 && (
-                        <span
-                          className="
-                            text-[8px]
-                            sm:text-[10px]
-
-                            text-gray-500
-
-                            border
-                            border-gray-300
-
-                            px-1
-                            sm:px-1.5
-
-                            py-0.5
-
-                            rounded-sm
-                          "
-                        >
-                          {discount}% OFF
-                        </span>
-                      )}
-
-                    </div>
-
-                    {/* ================================================= */}
-                    {/* CART AREA */}
-                    {/* ================================================= */}
-
-                    <div
-                      className={`
-                        flex
-                        items-center
-                        gap-1
-                        sm:gap-1.5
-                        mt-3
-                        overflow-hidden
-
-                        /* MOBILE */
-
-                        ${isSelected
-                          ? "opacity-100 h-10"
-                          : "opacity-0 h-0"
-                        }
-
-                        /* DESKTOP */
-
-                        sm:opacity-0
-                        sm:h-0
-
-                        sm:group-hover:opacity-100
-                        sm:group-hover:h-10
-
-                        transition-all
-                        duration-300
-                      `}
-                    >
-
-                      {/* ================================================= */}
-                      {/* QUANTITY */}
-                      {/* ================================================= */}
 
                       <div
                         className="
                           flex
                           items-center
-
-                          border
-                          border-gray-300
-                          rounded-md
-
-                          h-8
-                          sm:h-9
-
-                          shrink-0
+                          gap-1
+                          rounded-full
+                          bg-yellow-50
+                          px-1.5
+                          py-0.5
                         "
                       >
 
-                        {/* MINUS */}
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-
-                            decreaseQuantity(item._id);
-                          }}
+                        <Star
+                          size={12}
+                          strokeWidth={2}
                           className="
-                            w-6
-                            sm:w-7
-                            h-full
-
-                            flex
-                            items-center
-                            justify-center
-
-                            hover:bg-gray-100
+                            fill-yellow-400
+                            text-yellow-400
                           "
-                        >
-                          <Minus size={12} />
-                        </button>
-
-                        {/* NUMBER */}
+                        />
 
                         <span
                           className="
-                            w-5
-                            sm:w-6
-
-                            text-center
-
-                            text-xs
-                            sm:text-sm
+                            text-[10px]
+                            font-bold
+                            text-gray-800
                           "
                         >
-                          {quantity}
+                          {rating.toFixed(1)}
                         </span>
-
-                        {/* PLUS */}
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-
-                            increaseQuantity(item._id);
-                          }}
-                          className="
-                            w-6
-                            sm:w-7
-                            h-full
-
-                            flex
-                            items-center
-                            justify-center
-
-                            hover:bg-gray-100
-                          "
-                        >
-                          <Plus size={12} />
-                        </button>
 
                       </div>
 
-                      {/* ================================================= */}
-                      {/* ADD TO CART */}
-                      {/* ================================================= */}
-
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-
-                          console.log(
-                            "Add to cart:",
-                            item.title,
-                            "Quantity:",
-                            quantity
-                          );
-                        }}
+                      <span
                         className="
-                          flex-1
+                          truncate
+                          text-[9px]
+                          text-gray-400
+                          sm:text-[10px]
+                        "
+                      >
+                        {reviews > 0
+                          ? `${reviews} reviews`
+                          : "Top Rated"}
+                      </span>
 
-                          h-8
-                          sm:h-9
+                    </div>
 
-                          bg-green-600
-                          hover:bg-green-700
+                    {/* ==========================================
+                        PRICE
+                    ========================================== */}
 
-                          text-white
+                    <div
+                      className="
+                        mt-2.5
+                        flex
+                        items-center
+                        justify-between
+                        gap-1.5
+                      "
+                    >
 
-                          rounded-md
-
+                      <div
+                        className="
                           flex
                           items-center
-                          justify-center
-
-                          gap-1
-
-                          text-[10px]
-                          sm:text-xs
-
-                          font-medium
-
-                          min-w-0
-
-                          transition
+                          gap-1.5
                         "
                       >
 
-                        <ShoppingCart
-                          size={13}
-                          className="shrink-0"
-                        />
-
-                        <span className="truncate">
-                          Add to Cart
+                        <span
+                          className="
+                            text-base
+                            font-extrabold
+                            text-gray-900
+                            sm:text-lg
+                          "
+                        >
+                          ₹
+                          {discountedPrice.toFixed(0)}
                         </span>
 
-                      </button>
+                        {discount > 0 && (
 
-                      {/* ================================================= */}
-                      {/* BOTTOM HEART */}
-                      {/* ================================================= */}
+                          <span
+                            className="
+                              text-[9px]
+                              text-gray-400
+                              line-through
+                              sm:text-[10px]
+                            "
+                          >
+                            ₹{price.toFixed(0)}
+                          </span>
 
-                      <button
-                        type="button"
-                        aria-label="Add to wishlist"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
+                        )}
+
+                      </div>
+
+                      {/* SAVE */}
+
+                      {discount > 0 && (
+
+                        <span
+                          className="
+                            rounded-full
+                            bg-green-50
+                            px-1.5
+                            py-0.5
+                            text-[8px]
+                            font-bold
+                            text-green-600
+                            sm:px-2
+                            sm:text-[9px]
+                          "
+                        >
+                          SAVE ₹{saveAmount}
+                        </span>
+
+                      )}
+
+                    </div>
+
+                    {/* ==========================================
+                        DESKTOP ONLY VIEW
+                    ========================================== */}
+
+                    <div className="mt-3 hidden sm:flex">
+
+                      <Link
+                        to={`/product/${item._id}`}
                         className="
-                          hidden
-                          sm:flex
-
-                          w-8
-                          sm:w-9
-
-                          h-8
-                          sm:h-9
-
-                          shrink-0
-
-                          border
-                          border-gray-300
-
-                          rounded-md
-
+                          flex
+                          h-9
+                          w-full
                           items-center
                           justify-center
-
-                          hover:bg-green-600
-                          hover:text-white
-                          hover:border-green-600
-
-                          transition
+                          gap-1.5
+                          rounded-lg
+                          bg-green-600
+                          text-[11px]
+                          font-bold
+                          text-white
+                          shadow-sm
+                          transition-all
+                          duration-300
+                          hover:bg-green-700
+                          hover:shadow-md
+                          active:scale-[0.98]
                         "
                       >
-                        <Heart size={14} />
-                      </button>
+                        View
+
+                        <ArrowRight size={13} />
+
+                      </Link>
 
                     </div>
 
@@ -716,9 +669,46 @@ const PopularProducts = () => {
           </div>
         )}
 
+        {/* ==========================================
+            MOBILE VIEW ALL
+        ========================================== */}
+
+        {products.length > 0 && (
+
+          <div className="mt-7 flex justify-center sm:hidden">
+
+            <Link
+              to="/products"
+              className="
+                flex
+                items-center
+                gap-1.5
+                rounded-full
+                bg-green-600
+                px-5
+                py-2.5
+                text-xs
+                font-semibold
+                text-white
+                shadow-sm
+                transition
+                hover:bg-green-700
+              "
+            >
+              View All
+
+              <ArrowRight size={14} />
+
+            </Link>
+
+          </div>
+
+        )}
+
       </div>
+
     </section>
   );
-};
+}
 
 export default PopularProducts;
