@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import {
   Star,
   Heart,
   ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import api, { API_URL } from "../api/api";
+// import api, { API_URL } from "../api/api";
+import api from "../api/Api";
 
 function SellingProducts() {
   const [products, setProducts] = useState([]);
@@ -20,6 +21,7 @@ function SellingProducts() {
       setLoading(true);
 
       const res = await api.post("/Products/selling");
+      
 
       console.log("Selling Products:", res.data);
 
