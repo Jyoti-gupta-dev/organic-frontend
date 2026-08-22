@@ -24,7 +24,7 @@ function PopularProducts() {
       // const res = await axios.post(
       //   "http://localhost:5000/api/Products/Popular"
       // );
-       const res = await api.post("/Products/Popular");
+      const res = await api.post("/Products/Popular");
 
       console.log("Popular Products:", res.data);
 
@@ -265,14 +265,14 @@ function PopularProducts() {
               const discountedPrice =
                 discount > 0
                   ? price -
-                    (price * discount) / 100
+                  (price * discount) / 100
                   : price;
 
               const saveAmount =
                 discount > 0
                   ? Math.round(
-                      price - discountedPrice
-                    )
+                    price - discountedPrice
+                  )
                   : 0;
 
               // ==========================================
@@ -292,10 +292,10 @@ function PopularProducts() {
               // IMAGE
               // ==========================================
 
-              const imageUrl =
-                item.image?.startsWith("http")
-                  ? item.image
-                  : `http://localhost:5000/uploads/${item.image}`;
+              // const imageUrl =
+              //   item.image?.startsWith("http")
+              //     ? item.image
+              //     : `http://localhost:5000/uploads/${item.image}`;
 
               return (
 
@@ -424,7 +424,7 @@ function PopularProducts() {
                     {/* IMAGE */}
 
                     <img
-                      src={imageUrl}
+                      src={`https://organic-backend-five.vercel.app/uploads/${item.image}`}
                       alt={
                         item.title ||
                         "Product"

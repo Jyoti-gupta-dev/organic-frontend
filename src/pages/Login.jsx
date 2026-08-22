@@ -35,10 +35,7 @@ function Login() {
 
 
             if (res.data.success) {
-                // localStorage.setItem(
-                //     "user",
-                //     JSON.stringify(res.data.user)
-                // );
+              
                 const token = res.data.token
                 localStorage.setItem("token", token)
 
