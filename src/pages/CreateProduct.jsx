@@ -1168,7 +1168,7 @@ const CreateProduct = () => {
                 image
             );
 
-         
+
 
             // =================================================
             // API
@@ -1178,7 +1178,7 @@ const CreateProduct = () => {
                 "http://localhost:5000/api/Products/createProduct",
                 formData
             );
-           // const res = await axios.post("/Products/createproduct",formData)
+            // const res = await api.post("/Products/createproduct", formData)
 
             console.log(
                 "Product Response:",
