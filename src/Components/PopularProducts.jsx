@@ -383,7 +383,6 @@ function PopularProducts() {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-
                         console.log(
                           "Wishlist:",
                           item.title
@@ -425,10 +424,7 @@ function PopularProducts() {
 
                     <img
                       src={`https://organic-backend-five.vercel.app/uploads/${item.image}`}
-                      alt={
-                        item.title ||
-                        "Product"
-                      }
+                      alt={"Product"}
                       className="
                         h-full
                         w-full
@@ -437,10 +433,6 @@ function PopularProducts() {
                         duration-500
                         group-hover:scale-105
                       "
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          "https://via.placeholder.com/500x500?text=Product";
-                      }}
                     />
 
                   </Link>
