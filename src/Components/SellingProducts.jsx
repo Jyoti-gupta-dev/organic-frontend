@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Star,
   Heart,
@@ -240,11 +240,20 @@ function SellingProducts() {
               // IMAGE
               // ==========================================
 
-              const imageUrl =
-                item.image?.startsWith("http")
-                  ? item.image
-                  : `http://localhost:5000/uploads/${item.image}`;
-
+              // const imageUrl =
+              //   item.image?.startsWith("http")
+              //     ? item.image
+              //     : `http://localhost:5000/uploads/${item.image}`;
+              <img
+                src={`https://organic-backend-five.vercel.app/uploads/${item.image}`}
+                alt={item.title}
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  console.log("IMAGE ERROR:", item.image);
+                  e.currentTarget.src =
+                    "https://organic-backend-five.vercel.app/uploads/amul.jpg";
+                }}
+              />
               return (
                 <div
                   key={item._id}
